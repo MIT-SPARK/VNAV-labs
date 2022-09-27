@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package>
+  <name>lab_8</name>
+  <version>0.0.0</version>
+  <description>The lab_8 package. Contains software to learn about SLAM.</description>
+
+  <maintainer email="sjamieson@mit.edu">Stewart Jamieson</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>opencv3_catkin</build_depend>
+  <build_depend>gflags_catkin</build_depend>
+  <build_depend>glog_catkin</build_depend>
+  <build_depend>gtsam_catkin</build_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>image_transport</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>opencv3_catkin</run_depend>
+  <run_depend>gflags_catkin</run_depend>
+  <run_depend>glog_catkin</run_depend>
+  <run_depend>gtsam_catkin</run_depend>
+  <run_depend>actionlib</run_depend>
+  <run_depend>image_transport</run_depend>
+
+</package>

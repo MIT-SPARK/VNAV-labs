@@ -1,0 +1,4 @@
+- git:
+    local-name: opengv
+    uri: https://github.com/ethz-asl/opengv.git
+    version: master

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="dataset" default="office.bag" />
+  <arg name="path_to_dataset" default="$(eval env('HOME') + '/data/vnav/' + arg('dataset'))"/>
+
+  <node name="lab_6" pkg="lab_6" type="pose_estimation" output="screen"
+    args="--use_ransac=True
+    --pose_estimator=0
+    --scale_translation=1">
+    <remap from="/ground_truth_pose" to="/tesse/odom"/>
+    <remap from="/rgb_images_topic" to="/tesse/left_cam/rgb/image_raw"/>
+    <remap from="/depth_images_topic" to="/tesse/depth_cam/mono/image_raw"/>
+  </node>
+
+  <node name="viz" pkg="rviz" type="rviz" args="-d $(find lab_6)/rviz/office.rviz" />
+
+  <!-- Tip: press space on the terminal you ran this roslaunch to pause the rosbag-->
+  <node name="rosbag" pkg="rosbag" type="play" output="screen" launch-prefix="xterm -geometry 100x20 -e " args="--clock $(arg path_to_dataset)"/>
+</launch>

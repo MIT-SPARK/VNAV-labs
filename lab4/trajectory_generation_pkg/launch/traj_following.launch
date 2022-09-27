@@ -1,0 +1,9 @@
+<launch>
+  <!-- Launch trajectory generation node -->
+  <node name="trajectory_generation_node" pkg="trajectory_generation" type="trajectory_generation_node" output="screen" />
+
+  <!-- Launch our controller -->
+  <node name="controller_node" pkg="controller_pkg" type="controller_node" />
+
+  <!-- TODO: Copy your controller gains from lab 3 to here! -->
+</launch>

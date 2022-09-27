@@ -1,0 +1,21 @@
+<launch>
+  <!-- Run this launch file to test whether the drone can fly to the first waypoint-->
+  <!-- Arguments -->
+  <arg name="simulator_data_directory"     default="$(env HOME)/vnav-builds/vnav-2021-lab4/vnav-2021-lab4_Data"/>
+
+  <!-- Launch our controller -->
+  <node name="controller_node" pkg="controller_pkg" type="controller_node"/>
+
+  <!-- Launch traj vertices publisher -->
+  <node name="traj_vertices_publisher" pkg="planner_pkg"
+        type="traj_vertices_publisher" output="screen">
+
+    <!-- Parameters -->
+    <param name="simulator_data_directory"                value="$(arg simulator_data_directory)"/>
+  </node>
+
+  <!-- Launch planner -->
+  <!-- This node simple subscribe to the trajectory vertices topic and output the first point-->
+  <node name="simple_traj_planner" pkg="planner_pkg" type="simple_traj_planner"/>
+
+</launch>

@@ -1,0 +1,10 @@
+<TESSE_Agent_CameraInfo_v0.2>
+  <camera_info>
+    <name>depth</name>
+    <id>3</id>
+    <parameters height='480' width='720' fov='37.84929'/>
+    <position x='-0.05' y='0' z='0'/>
+    <rotation x='0' y='0' z='0' w='1'/>
+    <draw_distance near='0.3' far='50'/>
+  </camera_info>
+</TESSE_Agent_CameraInfo_v0.2>

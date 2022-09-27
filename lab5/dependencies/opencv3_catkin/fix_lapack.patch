@@ -1,0 +1,388 @@
+From 2b44c0b6493726c465152e1db82cd8e65944d0db Mon Sep 17 00:00:00 2001
+From: Alexander Alekhin <alexander.alekhin@intel.com>
+Date: Fri, 23 Dec 2016 14:50:33 +0300
+Subject: [PATCH 1/2] cmake: fix lapack
+
+- added compile check with multiple tries for different configurations
+- restored find_package(LAPACK)
+- avoided modification of OPENCV_LINKER_LIBS
+---
+ cmake/OpenCVFindLAPACK.cmake  | 209 +++++++++++++++++++++++++++++-------------
+ cmake/checks/lapack_check.cpp |  14 +++
+ modules/core/CMakeLists.txt   |   2 +-
+ 3 files changed, 160 insertions(+), 65 deletions(-)
+ create mode 100644 cmake/checks/lapack_check.cpp
+
+diff --git cmake/OpenCVFindLAPACK.cmake cmake/OpenCVFindLAPACK.cmake
+index dfacf243284..0bee1b4c90f 100644
+--- cmake/OpenCVFindLAPACK.cmake
++++ cmake/OpenCVFindLAPACK.cmake
+@@ -1,78 +1,159 @@
+-macro(_find_file_in_dirs VAR NAME DIRS)
+-    find_path(${VAR} ${NAME} ${DIRS} NO_DEFAULT_PATH)
+-    set(${VAR} ${${VAR}}/${NAME})
+-    unset(${VAR} CACHE)
++macro(_find_header_file_in_dirs VAR NAME)
++  unset(${VAR})
++  unset(${VAR} CACHE)
++  if(" ${ARGN}" STREQUAL " ")
++    check_include_file("${NAME}" HAVE_${VAR})
++    if(HAVE_${VAR})
++      set(${VAR} "${NAME}") # fallback
++    else()
++      set(${VAR} "")
++    endif()
++  else()
++    find_path(${VAR} "${NAME}" ${ARGN} NO_DEFAULT_PATH)
++    if(${VAR})
++      set(${VAR} "${${VAR}}/${NAME}")
++      unset(${VAR} CACHE)
++    else()
++      unset(${VAR} CACHE)
++      set(${VAR} "")
++    endif()
++  endif()
++endmacro()
++
++macro(ocv_lapack_check)
++  string(REGEX REPLACE "[^a-zA-Z0-9_]" "_" _lapack_impl "${LAPACK_IMPL}")
++  message(STATUS "LAPACK(${LAPACK_IMPL}): LAPACK_LIBRARIES: ${LAPACK_LIBRARIES}")
++  _find_header_file_in_dirs(OPENCV_CBLAS_H_PATH_${_lapack_impl} "${LAPACK_CBLAS_H}" "${LAPACK_INCLUDE_DIR}")
++  _find_header_file_in_dirs(OPENCV_LAPACKE_H_PATH_${_lapack_impl} "${LAPACK_LAPACKE_H}" "${LAPACK_INCLUDE_DIR}")
++  if(NOT OPENCV_CBLAS_H_PATH_${_lapack_impl} OR NOT OPENCV_LAPACKE_H_PATH_${_lapack_impl})
++    message(WARNING "LAPACK(${LAPACK_IMPL}): CBLAS/LAPACK headers are not found in '${LAPACK_INCLUDE_DIR}'")
++    unset(LAPACK_LIBRARIES)
++  else()
++    # adding proxy opencv_lapack.h header
++    set(CBLAS_H_PROXY_PATH ${CMAKE_BINARY_DIR}/opencv_lapack.h)
++    set(_lapack_include_str "\#include \"${OPENCV_CBLAS_H_PATH_${_lapack_impl}}\"")
++    if(NOT "${OPENCV_CBLAS_H_PATH_${_lapack_impl}}" STREQUAL "${OPENCV_LAPACKE_H_PATH_${_lapack_impl}}")
++      set(_lapack_include_str "${_lapack_include_str}\n#include \"${OPENCV_LAPACKE_H_PATH_${_lapack_impl}}\"")
++    endif()
++    # update file contents (if required)
++    set(__content_str "")
++    if(EXISTS "${CBLAS_H_PROXY_PATH}")
++      file(READ "${CBLAS_H_PROXY_PATH}" __content_str)
++    endif()
++    if(NOT " ${__content_str}" STREQUAL " ${_lapack_include_str}")
++      file(WRITE "${CBLAS_H_PROXY_PATH}" "${_lapack_include_str}")
++    endif()
++
++    try_compile(__VALID_LAPACK
++        "${OpenCV_BINARY_DIR}"
++        "${OpenCV_SOURCE_DIR}/cmake/checks/lapack_check.cpp"
++        CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:STRING=${LAPACK_INCLUDE_DIR}\;${CMAKE_BINARY_DIR}"
++                    "-DLINK_DIRECTORIES:STRING=${LAPACK_LINK_LIBRARIES}"
++                    "-DLINK_LIBRARIES:STRING=${LAPACK_LIBRARIES}"
++        OUTPUT_VARIABLE TRY_OUT
++    )
++    if(NOT __VALID_LAPACK)
++      #message(FATAL_ERROR "LAPACK: check build log:\n${TRY_OUT}")
++      message(STATUS "LAPACK(${LAPACK_IMPL}): Can't build LAPACK check code. This LAPACK version is not supported.")
++      unset(LAPACK_LIBRARIES)
++    else()
++      message(STATUS "LAPACK(${LAPACK_IMPL}): Support is enabled.")
++      ocv_include_directories(${LAPACK_INCLUDE_DIR})
++      set(HAVE_LAPACK 1)
++    endif()
++  endif()
+ endmacro()
+ 
+ if(WITH_LAPACK)
+-    ocv_update(LAPACK_IMPL "Unknown")
+-    if(NOT LAPACK_LIBRARIES)
+-        include(cmake/OpenCVFindMKL.cmake)
+-        if(HAVE_MKL)
+-            set(LAPACK_INCLUDE_DIR  ${MKL_INCLUDE_DIRS})
+-            set(LAPACK_LIBRARIES    ${MKL_LIBRARIES}   )
+-            set(LAPACK_CBLAS_H      "mkl_cblas.h"      )
+-            set(LAPACK_LAPACKE_H    "mkl_lapack.h"    )
+-            set(LAPACK_IMPL         "MKL")
+-        endif()
++  ocv_update(LAPACK_IMPL "Unknown")
++  if(NOT OPENCV_LAPACK_FIND_PACKAGE_ONLY)
++    if(NOT LAPACK_LIBRARIES AND NOT OPENCV_LAPACK_DISABLE_MKL)
++      include(cmake/OpenCVFindMKL.cmake)
++      if(HAVE_MKL)
++        set(LAPACK_INCLUDE_DIR  ${MKL_INCLUDE_DIRS})
++        set(LAPACK_LIBRARIES    ${MKL_LIBRARIES})
++        set(LAPACK_CBLAS_H      "mkl_cblas.h")
++        set(LAPACK_LAPACKE_H    "mkl_lapack.h")
++        set(LAPACK_IMPL         "MKL")
++        ocv_lapack_check()
++      endif()
+     endif()
+     if(NOT LAPACK_LIBRARIES)
+-        include(cmake/OpenCVFindOpenBLAS.cmake)
+-        if(OpenBLAS_FOUND)
+-            set(LAPACK_INCLUDE_DIR  ${OpenBLAS_INCLUDE_DIR} )
+-            set(LAPACK_LIBRARIES    ${OpenBLAS_LIB}         )
+-            set(LAPACK_CBLAS_H      "cblas.h"      )
+-            set(LAPACK_LAPACKE_H    "lapacke.h"    )
+-            set(LAPACK_IMPL         "OpenBLAS")
+-        endif()
++      include(cmake/OpenCVFindOpenBLAS.cmake)
++      if(OpenBLAS_FOUND)
++        set(LAPACK_INCLUDE_DIR  ${OpenBLAS_INCLUDE_DIR})
++        set(LAPACK_LIBRARIES    ${OpenBLAS_LIB})
++        set(LAPACK_CBLAS_H      "cblas.h")
++        set(LAPACK_LAPACKE_H    "lapacke.h")
++        set(LAPACK_IMPL         "OpenBLAS")
++        ocv_lapack_check()
++      endif()
+     endif()
+     if(NOT LAPACK_LIBRARIES AND UNIX)
+-        include(cmake/OpenCVFindAtlas.cmake)
+-        if(ATLAS_FOUND)
+-            set(LAPACK_INCLUDE_DIR  ${Atlas_INCLUDE_DIR})
+-            set(LAPACK_LIBRARIES    ${Atlas_LIBRARIES}  )
+-            set(LAPACK_CBLAS_H      "cblas.h"      )
+-            set(LAPACK_LAPACKE_H    "lapacke.h"    )
+-            set(LAPACK_IMPL "Atlas")
+-        endif()
++      include(cmake/OpenCVFindAtlas.cmake)
++      if(ATLAS_FOUND)
++        set(LAPACK_INCLUDE_DIR  ${Atlas_INCLUDE_DIR})
++        set(LAPACK_LIBRARIES    ${Atlas_LIBRARIES})
++        set(LAPACK_CBLAS_H      "cblas.h")
++        set(LAPACK_LAPACKE_H    "lapacke.h")
++        set(LAPACK_IMPL         "Atlas")
++        ocv_lapack_check()
++      endif()
+     endif()
++  endif()
+ 
+-    if(NOT LAPACK_LIBRARIES AND APPLE)
+-        set(LAPACK_INCLUDE_DIR  "Accelerate")
+-        set(LAPACK_LIBRARIES    "-framework Accelerate")
+-        set(LAPACK_CBLAS_H      "cblas.h"      )
+-        set(LAPACK_LAPACKE_H    "lapacke.h"    )
+-        set(LAPACK_IMPL         "Apple")
++  if(NOT LAPACK_LIBRARIES)
++    if(WIN32 AND NOT OPENCV_LAPACK_SHARED_LIBS)
++      set(BLA_STATIC 1)
++    endif()
++    find_package(LAPACK)
++    if(LAPACK_FOUND)
++      if(NOT DEFINED LAPACKE_INCLUDE_DIR)
++        find_path(LAPACKE_INCLUDE_DIR "lapacke.h")
++      endif()
++      if(NOT DEFINED MKL_LAPACKE_INCLUDE_DIR)
++        find_path(MKL_LAPACKE_INCLUDE_DIR "mkl_lapack.h")
++      endif()
++      if(MKL_LAPACKE_INCLUDE_DIR AND NOT OPENCV_LAPACK_DISABLE_MKL)
++        set(LAPACK_INCLUDE_DIR  ${MKL_LAPACKE_INCLUDE_DIR})
++        set(LAPACK_CBLAS_H      "mkl_cblas.h")
++        set(LAPACK_LAPACKE_H    "mkl_lapack.h")
++        set(LAPACK_IMPL         "LAPACK/MKL")
++        ocv_lapack_check()
++      endif()
++      if(LAPACKE_INCLUDE_DIR AND NOT HAVE_LAPACK)
++        set(LAPACK_INCLUDE_DIR  ${LAPACKE_INCLUDE_DIR})
++        set(LAPACK_CBLAS_H      "cblas.h")
++        set(LAPACK_LAPACKE_H    "lapacke.h")
++        set(LAPACK_IMPL         "LAPACK/Generic")
++        ocv_lapack_check()
++      elseif(APPLE)
++        set(LAPACK_CBLAS_H      "Accelerate/Accelerate.h")
++        set(LAPACK_LAPACKE_H    "Accelerate/Accelerate.h")
++        set(LAPACK_IMPL         "LAPACK/Apple")
++        ocv_lapack_check()
++      else()
++        unset(LAPACK_LIBRARIES CACHE)
++      endif()
+     endif()
++  endif()
+ 
+-    set(LAPACK_INCLUDE_DIR  ${LAPACK_INCLUDE_DIR}            CACHE PATH      "Path to BLAS include dir" FORCE)
+-    set(LAPACK_CBLAS_H      ${LAPACK_CBLAS_H}     CACHE STRING    "Alternative name of cblas.h" FORCE)
+-    set(LAPACK_LAPACKE_H    ${LAPACK_LAPACKE_H}   CACHE STRING    "Alternative name of lapacke.h" FORCE)
+-    set(LAPACK_LIBRARIES    ${LAPACK_LIBRARIES}            CACHE STRING    "Names of BLAS & LAPACK binaries (.so, .dll, .a, .lib)" FORCE)
+-    set(LAPACK_IMPL ${LAPACK_IMPL} CACHE STRING "Lapack implementation id" FORCE)
++  if(NOT LAPACK_LIBRARIES AND APPLE AND NOT OPENCV_LAPACK_FIND_PACKAGE_ONLY)
++    set(LAPACK_INCLUDE_DIR  "")
++    set(LAPACK_LIBRARIES    "-framework Accelerate")
++    set(LAPACK_CBLAS_H      "Accelerate/Accelerate.h")
++    set(LAPACK_LAPACKE_H    "Accelerate/Accelerate.h")
++    set(LAPACK_IMPL         "Apple")
++    ocv_lapack_check()
++  endif()
+ 
+-    if(LAPACK_LIBRARIES) #adding proxy cblas.h header
+-        message(STATUS "LAPACK_IMPL: ${LAPACK_IMPL}, LAPACK_LIBRARIES: ${LAPACK_LIBRARIES}")
+-        if("${LAPACK_IMPL}" STREQUAL "Apple")
+-            set(CBLAS_H_PATH "Accelerate/Accelerate.h")
+-            set(LAPACKE_H_PATH "Accelerate/Accelerate.h")
+-        else()
+-            _find_file_in_dirs(CBLAS_H_PATH "${LAPACK_CBLAS_H}" "${LAPACK_INCLUDE_DIR}")
+-            _find_file_in_dirs(LAPACKE_H_PATH "${LAPACK_LAPACKE_H}" "${LAPACK_INCLUDE_DIR}")
+-        endif()
+-        if(NOT CBLAS_H_PATH OR NOT LAPACKE_H_PATH)
+-            message(WARNING "CBLAS/LAPACK headers are not found in '${LAPACK_INCLUDE_DIR}'")
+-        endif()
+-        ocv_include_directories(${LAPACK_INCLUDE_DIR})
+-        list(APPEND OPENCV_LINKER_LIBS ${LAPACK_LIBRARIES})
+-        set(HAVE_LAPACK 1)
++  if(NOT HAVE_LAPACK AND LAPACK_LIBRARIES)
++    ocv_lapack_check()
++  endif()
+ 
+-        set(CBLAS_H_PROXY_PATH ${CMAKE_BINARY_DIR}/opencv_lapack.h)
+-        set(_include_str "\#include \"${CBLAS_H_PATH}\"")
+-        if("${CBLAS_H_PATH}" STREQUAL "${LAPACKE_H_PATH}")
+-        else()
+-            set(_include_str "${_include_str}\n\#include \"${LAPACKE_H_PATH}\"")
+-        endif()
+-        file(WRITE ${CBLAS_H_PROXY_PATH} ${_include_str})
+-    endif()
++  set(LAPACK_INCLUDE_DIR ${LAPACK_INCLUDE_DIR} CACHE PATH   "Path to BLAS include dir" FORCE)
++  set(LAPACK_CBLAS_H     ${LAPACK_CBLAS_H}     CACHE STRING "Alternative name of cblas.h" FORCE)
++  set(LAPACK_LAPACKE_H   ${LAPACK_LAPACKE_H}   CACHE STRING "Alternative name of lapacke.h" FORCE)
++  set(LAPACK_LIBRARIES   ${LAPACK_LIBRARIES}   CACHE STRING "Names of BLAS & LAPACK binaries (.so, .dll, .a, .lib)" FORCE)
++  set(LAPACK_IMPL        ${LAPACK_IMPL}        CACHE STRING "Lapack implementation id" FORCE)
+ endif()
+diff --git cmake/checks/lapack_check.cpp cmake/checks/lapack_check.cpp
+new file mode 100644
+index 00000000000..0457c44d686
+--- /dev/null
++++ cmake/checks/lapack_check.cpp
+@@ -0,0 +1,14 @@
++#include "opencv_lapack.h"
++
++static char* check_fn1 = (char*)sgesv_;
++static char* check_fn2 = (char*)sposv_;
++static char* check_fn3 = (char*)spotrf_;
++static char* check_fn4 = (char*)sgesdd_;
++
++int main(int argc, char* argv[])
++{
++    (void)argv;
++    if(argc > 1000)
++        return check_fn1[0] + check_fn2[0] + check_fn3[0] + check_fn4[0];
++    return 0;
++}
+diff --git modules/core/CMakeLists.txt modules/core/CMakeLists.txt
+index 0485a08ad3b..41da8254578 100644
+--- modules/core/CMakeLists.txt
++++ modules/core/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ set(the_description "The Core Functionality")
+ ocv_add_module(core
+                "${OPENCV_HAL_LINKER_LIBS}"
+-               PRIVATE_REQUIRED ${ZLIB_LIBRARIES} "${OPENCL_LIBRARIES}" "${VA_LIBRARIES}"
++               PRIVATE_REQUIRED ${ZLIB_LIBRARIES} "${OPENCL_LIBRARIES}" "${VA_LIBRARIES}" "${LAPACK_LIBRARIES}"
+                OPTIONAL opencv_cudev
+                WRAP java python)
+ 
+
+From 3668a01fca0858c32b4083dfd0215eb7bd8fa263 Mon Sep 17 00:00:00 2001
+From: Alexander Alekhin <alexander.alekhin@intel.com>
+Date: Tue, 17 Jan 2017 15:52:45 +0300
+Subject: [PATCH 2/2] eliminate warnings
+
+hal_internal.cpp(101): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+---
+ modules/core/src/hal_internal.cpp | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
+
+diff --git modules/core/src/hal_internal.cpp modules/core/src/hal_internal.cpp
+index b2b6dc36263..345ca42dc65 100644
+--- modules/core/src/hal_internal.cpp
++++ modules/core/src/hal_internal.cpp
+@@ -98,7 +98,7 @@ set_value(fptype *dst, size_t dst_ld, fptype value, size_t m, size_t n)
+ template <typename fptype> static inline int
+ lapack_LU(fptype* a, size_t a_step, int m, fptype* b, size_t b_step, int n, int* info)
+ {
+-    int lda = a_step / sizeof(fptype), sign = 0;
++    int lda = (int)(a_step / sizeof(fptype)), sign = 0;
+     int* piv = new int[m];
+ 
+     transpose_square_inplace(a, lda, m);
+@@ -114,7 +114,7 @@ lapack_LU(fptype* a, size_t a_step, int m, fptype* b, size_t b_step, int n, int*
+         }
+         else
+         {
+-            int ldb = b_step / sizeof(fptype);
++            int ldb = (int)(b_step / sizeof(fptype));
+             fptype* tmpB = new fptype[m*n];
+ 
+             transpose(b, ldb, tmpB, m, m, n);
+@@ -153,7 +153,7 @@ template <typename fptype> static inline int
+ lapack_Cholesky(fptype* a, size_t a_step, int m, fptype* b, size_t b_step, int n, bool* info)
+ {
+     int lapackStatus = 0;
+-    int lda = a_step / sizeof(fptype);
++    int lda = (int)(a_step / sizeof(fptype));
+     char L[] = {'L', '\0'};
+ 
+     if(b)
+@@ -167,7 +167,7 @@ lapack_Cholesky(fptype* a, size_t a_step, int m, fptype* b, size_t b_step, int n
+         }
+         else
+         {
+-            int ldb = b_step / sizeof(fptype);
++            int ldb = (int)(b_step / sizeof(fptype));
+             fptype* tmpB = new fptype[m*n];
+             transpose(b, ldb, tmpB, m, m, n);
+ 
+@@ -197,9 +197,9 @@ lapack_Cholesky(fptype* a, size_t a_step, int m, fptype* b, size_t b_step, int n
+ template <typename fptype> static inline int
+ lapack_SVD(fptype* a, size_t a_step, fptype *w, fptype* u, size_t u_step, fptype* vt, size_t v_step, int m, int n, int flags, int* info)
+ {
+-    int lda = a_step / sizeof(fptype);
+-    int ldv = v_step / sizeof(fptype);
+-    int ldu = u_step / sizeof(fptype);
++    int lda = (int)(a_step / sizeof(fptype));
++    int ldv = (int)(v_step / sizeof(fptype));
++    int ldu = (int)(u_step / sizeof(fptype));
+     int lwork = -1;
+     int* iworkBuf = new int[8*std::min(m, n)];
+     fptype work1 = 0;
+@@ -256,7 +256,7 @@ lapack_SVD(fptype* a, size_t a_step, fptype *w, fptype* u, size_t u_step, fptype
+ template <typename fptype> static inline int
+ lapack_QR(fptype* a, size_t a_step, int m, int n, int k, fptype* b, size_t b_step, fptype* dst, int* info)
+ {
+-    int lda = a_step / sizeof(fptype);
++    int lda = (int)(a_step / sizeof(fptype));
+     char mode[] = { 'N', '\0' };
+     if(m < n)
+         return CV_HAL_ERROR_NOT_IMPLEMENTED;
+@@ -303,7 +303,7 @@ lapack_QR(fptype* a, size_t a_step, int m, int n, int k, fptype* b, size_t b_ste
+         {
+             std::vector<fptype> tmpBMemHolder(m*k);
+             fptype* tmpB = &tmpBMemHolder.front();
+-            int ldb = b_step / sizeof(fptype);
++            int ldb = (int)(b_step / sizeof(fptype));
+             transpose(b, ldb, tmpB, m, m, k);
+ 
+             if (typeid(fptype) == typeid(float))
+@@ -357,10 +357,10 @@ template <typename fptype> static inline int
+ lapack_gemm(const fptype *src1, size_t src1_step, const fptype *src2, size_t src2_step, fptype alpha,
+             const fptype *src3, size_t src3_step, fptype beta, fptype *dst, size_t dst_step, int a_m, int a_n, int d_n, int flags)
+ {
+-    int ldsrc1 = src1_step / sizeof(fptype);
+-    int ldsrc2 = src2_step / sizeof(fptype);
+-    int ldsrc3 = src3_step / sizeof(fptype);
+-    int lddst = dst_step / sizeof(fptype);
++    int ldsrc1 = (int)(src1_step / sizeof(fptype));
++    int ldsrc2 = (int)(src2_step / sizeof(fptype));
++    int ldsrc3 = (int)(src3_step / sizeof(fptype));
++    int lddst = (int)(dst_step / sizeof(fptype));
+     int c_m, c_n, d_m;
+     CBLAS_TRANSPOSE transA, transB;
+ 
+@@ -434,10 +434,10 @@ template <typename fptype> static inline int
+ lapack_gemm_c(const fptype *src1, size_t src1_step, const fptype *src2, size_t src2_step, fptype alpha,
+             const fptype *src3, size_t src3_step, fptype beta, fptype *dst, size_t dst_step, int a_m, int a_n, int d_n, int flags)
+ {
+-    int ldsrc1 = src1_step / sizeof(std::complex<fptype>);
+-    int ldsrc2 = src2_step / sizeof(std::complex<fptype>);
+-    int ldsrc3 = src3_step / sizeof(std::complex<fptype>);
+-    int lddst = dst_step / sizeof(std::complex<fptype>);
++    int ldsrc1 = (int)(src1_step / sizeof(std::complex<fptype>));
++    int ldsrc2 = (int)(src2_step / sizeof(std::complex<fptype>));
++    int ldsrc3 = (int)(src3_step / sizeof(std::complex<fptype>));
++    int lddst = (int)(dst_step / sizeof(std::complex<fptype>));
+     int c_m, c_n, d_m;
+     CBLAS_TRANSPOSE transA, transB;
+     std::complex<fptype> cAlpha(alpha, 0.0);

@@ -1,0 +1,45 @@
+<launch>
+  <!-- Interface arguments -->
+  <arg name="ns"                   default="tesse"/>
+  <arg name="teleop"               default="true"/>
+  <arg name="drive_with_ackermann" default="false"/>
+  <arg name="params_dir"           default="$(find tesse_ros_bridge)/params"/>
+  <arg name="use_gt_frames"        default="true"/>
+  <arg name="enable_step_mode"     default="true"/>
+
+  <!-- Network arguments -->
+  <arg name="sim_ip"                default="127.0.0.1"/>
+  <arg name="self_ip"               default="127.0.0.1"/>
+  <arg name="use_broadcast"         default="true"/>
+
+  <!-- Sim arguments -->
+  <arg name="use_sim_time"          default="true"/>
+  <arg name="frame_rate"            default="20.0"/>
+  <arg name="imu_rate"              default="200"/>
+  <arg name="scan_rate"             default="40.0"/>
+  <arg name="enable_collision"      default="true"/>
+  <arg name="initial_scene"         default="1"/>
+
+  <arg name="publish_clock"             default="true"/>
+  <arg name="publish_stereo_cams"       default="false"/>
+  <arg name="publish_monochrome_stereo" default="false"/>
+  <arg name="publish_segmentation"      default="false"/>
+  <arg name="publish_depth"             default="false"/>
+  <arg name="publish_third_pov"         default="false"/>
+  <arg name="publish_metadata"          default="false"/>
+  <arg name="publish_hood_lidar"        default="false"/>
+  <arg name="publish_trunk_lidar"       default="false"/>
+
+  <!-- Trajectory arguments -->
+  <arg name="traj_filepath" default="$(find tesse_ros_bridge)/trajectories/traj_0.csv"/>
+  <arg name="drive_topic"   default="drive"/>
+
+  <include file="$(find tesse_ros_bridge)/launch/tesse_bridge.launch" pass_all_args="true">
+    <remap from="drive" to="$(arg drive_topic)"/>
+  </include>
+
+  <node ns="$(arg ns)" pkg="tesse_ros_bridge" type="traj_saver.py" name="traj_writer" output="screen">
+    <param name="traj_filepath" value="$(arg traj_filepath)"/>
+    <param name="drive_topic"   value="$(arg drive_topic)"/>
+  </node>
+</launch>

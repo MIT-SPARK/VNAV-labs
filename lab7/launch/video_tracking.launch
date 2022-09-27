@@ -1,0 +1,16 @@
+<launch>
+  <!-- (TODO) Add the path to your dataset here: 2018-10-01-19-10-08_30fps_LowRes-->
+  <arg name="path_to_dataset" default="/home/tonirv/datasets/VNAV/2018-10-09-15-49-32.bag"/>
+
+  <node name="lab_7" pkg="lab_7" type="gtsam" output="screen"
+    args="--use_ransac=True
+          --pose_estimator=0">
+    <remap from="/camera_info" to="/camera/rgb/camera_info"/>
+    <remap from="/ground_truth_pose" to="/mavros/local_position/pose"/>
+    <remap from="/rgb_images_topic" to="/camera/rgb/image_raw"/>
+    <remap from="/depth_images_topic" to="/camera/depth_registered/sw_registered/image_rect_raw"/>
+  </node>
+  <!-- Tip: press space on the terminal you ran this roslaunch to pause the rosbag-->
+  <node name="rosbag" pkg="rosbag" type="play" output="screen"
+    args="--clock $(arg path_to_dataset)"/>
+</launch>

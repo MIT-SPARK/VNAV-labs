@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package>
+  <name>lab_6</name>
+  <version>0.0.0</version>
+  <description>The lab_6 package. Contains software to learn about robust pose estimation.</description>
+
+  <maintainer email="arosinol@mit.edu">Antoni Rosinol</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>opencv3_catkin</build_depend>
+  <build_depend>glog_catkin</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>lab_5</build_depend>
+  <build_depend>eigen_catkin</build_depend>
+  <build_depend>opengv</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>opencv3_catkin</run_depend>
+  <run_depend>glog_catkin</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>lab_5</run_depend>
+  <run_depend>eigen_catkin</run_depend>
+  <run_depend>opengv</run_depend>
+
+</package>

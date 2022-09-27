@@ -1,0 +1,15 @@
+<!--
+    Run this launch file for quadrotor trajectory optimization
+-->
+<launch>
+  <arg name="simulator_data_directory"     default="$(env HOME)/vnav-builds/vnav-2021-lab4/vnav-2021-lab4_Data"/>
+
+  <!-- Launch traj vertices publisher -->
+  <node name="traj_vertices_publisher" pkg="planner_pkg"
+        type="traj_vertices_publisher" output="screen">
+
+    <!-- Parameters -->
+    <param name="simulator_data_directory"                value="$(arg simulator_data_directory)"/>
+  </node>
+
+</launch>

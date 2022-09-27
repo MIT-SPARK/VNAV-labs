@@ -1,0 +1,5 @@
+#!/bin/sh
+
+DESTDIR=@NLOPT_INSTALL_PREFIX@ make install
+
+cp -r @NLOPT_INSTALL_DIR@/* @CATKIN_DEVEL_PREFIX@/

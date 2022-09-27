@@ -1,0 +1,11 @@
+<TESSE_Agent_Metadata_v0.3>
+  <position x='-4.875265' y='2.000004' z='13.69497'/>
+  <quaternion x='0' y='-0.9978437' z='0' w='-0.0656358'/>
+  <velocity x_dot='3.996803E-15' y_dot='-2.623047E-06' z_dot='9.720728E-09'/>
+  <angular_velocity x_ang_dot='0' y_ang_dot='0' z_ang_dot='0'/>
+  <acceleration x_ddot='-2.225064E-14' y_ddot='0' z_ddot='-2.438492E-09'/>
+  <angular_acceleration x_ang_ddot='0' y_ang_ddot='0' z_ang_ddot='0'/>
+  <time>156.045</time>
+  <collision status='false' name=''/>
+</TESSE_Agent_Metadata_v0.3>
+

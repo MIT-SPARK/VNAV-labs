@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>two_drones_pkg</name>
+  <version>0.0.0</version>
+  <description>MIT 16.S398 VNAV 2018 - Lab 2 package</description>
+  <maintainer email="valerio@mit.edu">Valerio Varricchio</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>tf</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>tf</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <export>
+  </export>
+</package>

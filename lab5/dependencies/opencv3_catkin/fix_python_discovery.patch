@@ -1,0 +1,18 @@
+commit c596ddc7ca1929d740b78ba2ff953b2406041e04
+Author: Kevin Egger <eggerk@ethz.ch>
+Date:   Wed Nov 9 15:39:50 2016 +0100
+
+    Turned error messages for Python numpy discovery off.
+
+diff --git cmake/OpenCVDetectPython.cmake b/cmake/OpenCVDetectPython.cmake
+index 6dec76f..fba147a 100644
+--- cmake/OpenCVDetectPython.cmake
++++ cmake/OpenCVDetectPython.cmake
+@@ -177,6 +177,7 @@ if(NOT ${found})
+           execute_process(COMMAND "${_executable}" -c "import os; os.environ['DISTUTILS_USE_SDK']='1'; import numpy.distutils; print(os.pathsep.join(numpy.distutils.misc_util.get_numpy_include_dirs()))"
+                           RESULT_VARIABLE _numpy_process
+                           OUTPUT_VARIABLE _numpy_include_dirs
++                          ERROR_QUIET
+                           OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+           if(NOT _numpy_process EQUAL 0)

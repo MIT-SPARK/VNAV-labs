@@ -1,0 +1,9 @@
+<launch>
+  <arg name="city_map_file" default="$(find tesse_ros_bridge)/maps/city.yaml"/>
+  <arg name="city_road_map_file" default="$(find tesse_ros_bridge)/maps/city_roads.yaml"/>
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg city_map_file)" />
+  <node name="road_map_server" pkg="map_server" type="map_server" args="$(arg city_road_map_file)">
+    <remap from="map" to="roads"/>
+  </node>
+</launch>

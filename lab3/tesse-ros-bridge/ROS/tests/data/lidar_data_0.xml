@@ -1,0 +1,9 @@
+<TESSE_Agent_LidarInfo_v0.5>
+  <lidar_info>
+    <name>trunk_Lidar2D</name>
+    <id>1</id>
+    <parameters max_range='200' min_angle='-3.92699' max_angle='0.785398' ray_count='1080'/>
+    <position x='0.017' y='0' z='-0.17'/>
+    <rotation x='0' y='0' z='0' w='1'/>
+  </lidar_info>
+</TESSE_Agent_LidarInfo_v0.5>

@@ -1,0 +1,10 @@
+<launch>
+  <arg name="descriptor" default="SIFT" />
+
+  <node name="lab_5" pkg="lab_5" type="track_features" output="screen">
+    <param name="img1_path" type="string" value="$(find lab_5)/images/box.png"/>
+    <param name="img2_path" type="string" value="$(find lab_5)/images/box_in_scene.png"/>
+    <param name="mode" type="int" value="0"/>
+    <param name="descriptor" type="string" value="$(arg descriptor)" />
+  </node>
+</launch>

@@ -1,0 +1,16 @@
+<package>
+  <name>nlopt</name>
+  <version>2.4.1</version>
+  <description>nlopt</description>
+  <maintainer email="stevenj@alum.mit.edu">Steven G. Johnson</maintainer>
+
+  <license>LGPLv3 or later</license>
+
+  <url type="website">http://ab-initio.mit.edu/wiki/index.php/NLopt</url>
+  <url type="bugtracker">http://ab-initio.mit.edu/cgi-bin/mailman/listinfo/nlopt-discuss</url>
+
+  <author>Steven G. Johnson</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>

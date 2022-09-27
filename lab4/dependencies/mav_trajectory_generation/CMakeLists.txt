@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.0)
+IF (NOT DEFINED ENV{ROS_DISTRO})
+    set(ENV{ROS_DISTRO} melodic)
+    message(WARNING "Assuming distro $ENV{ROS_DISTRO}. Use the ROS_DISTRO environment variable to override.")
+ENDIF()
+#include_directories("/opt/ros/$ENV{ROS_DISTRO}/include")
+include_directories("$ENV{HOME}/warp_ws/devel/include")
+LIST(APPEND CMAKE_PREFIX_PATH "/opt/ros/$ENV{ROS_DISTRO};$ENV{HOME}/warp_ws/devel")
+
+add_subdirectory(mav_trajectory_generation)
+add_subdirectory(mav_trajectory_generation_ros)
+add_subdirectory(mav_trajectory_generation_example)

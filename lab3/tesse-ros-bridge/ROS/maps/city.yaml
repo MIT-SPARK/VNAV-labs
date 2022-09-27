@@ -1,0 +1,6 @@
+image: city.png
+resolution: 0.0967
+origin: [-230.0, -160.0, 0.0]
+occupied_thresh: 0.5
+free_thresh: 0.5
+negate: 0

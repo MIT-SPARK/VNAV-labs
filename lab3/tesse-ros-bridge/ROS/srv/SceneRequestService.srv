@@ -1,0 +1,8 @@
+## Scene Change Request Service
+
+# Request fields
+int8 id  # integer id of scene request
+---
+
+# Response fields
+bool success  # true if scene change was completed without exception, false otw

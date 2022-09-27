@@ -1,0 +1,161 @@
+<!--
+     Launch TESSE simulator as well as stereo_gray and semantic point
+     cloud reconstructions optionally.
+     RVIZ is used for visualization.
+-->
+<launch>
+  <arg name="ns"                   default="tesse"/>
+  <arg name="teleop"               default="false"/>
+  <arg name="drive_with_ackermann" default="false"/>
+  <arg name="params_dir"           default="$(find tesse_ros_bridge)/params"/>
+  <arg name="use_gt_frames"        default="true"/>
+  <arg name="enable_step_mode"     default="false"/>
+
+  <!-- Network arguments -->
+  <arg name="sim_ip"                default="127.0.0.1"/>
+  <arg name="self_ip"               default="127.0.0.1"/>
+  <arg name="use_broadcast"         default="true"/>
+
+  <!-- Specify data to publish -->
+  <!-- `publish_stereo_gry` toggles between publishing as mono8 (true) or rgb8 (false) \
+        for both left/right stereo cameras -->
+  <arg name="publish_clock"             default="true"/>
+  <arg name="publish_metadata"          default="false"/>
+  <arg name="publish_collisions"        default="false"/>
+
+  <arg name="publish_imu"               default="true"/>
+  <arg name="publish_odom"              default="true"/>
+  <arg name="publish_noisy_imu"         default="true"/>
+  <arg name="publish_imu_noise_biases"  default="true"/>
+  <arg name="publish_noisy_odom"        default="false"/>
+
+  <arg name="publish_stereo_rgb"        default="true"/>
+  <arg name="publish_stereo_gry"        default="true"/>
+  <arg name="publish_segmentation"      default="true"/>
+  <arg name="publish_depth"             default="true"/>
+  <arg name="publish_third_pov"         default="false"/>
+
+  <arg name="publish_front_lidar"       default="true"/>
+  <arg name="publish_rear_lidar"        default="true"/>
+
+  <!-- Sanity check argument -->
+  <arg name="stereo_baseline"      default="0.10"/>
+
+  <!-- Sim arguments -->
+  <!-- NOTE: `use_sim_time` should always be true for tesse! -->
+  <arg name="use_sim_time"          default="true"/>
+  <arg name="frame_rate"            default="20.0"/>
+  <arg name="imu_rate"              default="200"/>
+  <arg name="scan_rate"             default="40.0"/>
+  <arg name="enable_collision"      default="true"/>
+  <arg name="initial_scene"         default="1"/>
+
+  <!-- Reference frame arguments -->
+  <arg name="world_frame_id"        default="world"/>
+  <arg name="map_frame_id"          default="map"/>
+  <arg name="body_frame_id"         default="base_link"/>
+  <arg name="body_frame_id_gt"      default="base_link_gt"/>
+
+  <!-- If use_sim, simulator will publish -->
+  <param name="/use_sim_time" value="$(arg use_sim_time)"/>
+
+  <!-- Map servers -->
+  <!-- <include file="$(find tesse_ros_bridge)/launch/maps.launch"/> -->
+
+  <!-- Launch tesse ROS Bridge Node -->
+  <node ns="$(arg ns)" name="tesse_ros_bridge" pkg="tesse_ros_bridge"
+        type="tesse_ros_node.py" output="screen">
+    <!-- Topics -->
+    <remap from="imu/clean/imu"          to="imu/clean/imu"/>
+    <remap from="imu/noisy/imu"          to="imu/noisy/imu"/>
+    <remap from="imu/noisy/biases/gyro"  to="imu/noisy/biases/gyro"/>
+    <remap from="imu/noisy/biases/accel" to="imu/noisy/biases/accel"/>
+    <remap from="odom"                   to="odom"/>
+
+    <remap from="left_cam/rgb/image_raw"   to="left_cam/rgb/image_raw"/>
+    <remap from="left_cam/mono/image_raw"  to="left_cam/mono/image_raw"/>
+    <remap from="right_cam/image_raw"      to="right_cam/image_raw"/>
+    <remap from="seg_cam/rgb/image_raw"    to="seg_cam/rgb/image_raw"/>
+    <remap from="depth_cam/mono/image_raw" to="depth_cam/mono/image_raw"/>
+
+    <remap from="left_cam/camera_info"  to="left_cam/camera_info"/>
+    <remap from="right_cam/camera_info" to="right_cam/camera_info"/>
+    <remap from="seg_cam/camera_info"   to="seg_cam/camera_info"/>
+    <remap from="depth_cam/camera_info" to="depth_cam/camera_info"/>
+
+    <remap from="lidar/front_lidar/scan" to="lidar/front_lidar/scan"/>
+    <remap from="lidar/rear_lidar/scan"  to="lidar/rear_lidar/scan"/>
+
+    <!-- Interfacing params -->
+    <param name="teleop"                value="$(arg teleop)"/>
+    <param name="drive_with_ackermann"  value="$(arg drive_with_ackermann)"/>
+    <param name="use_gt_frames"         value="$(arg use_gt_frames)"/>
+    <param name="enable_step_mode"      value="$(arg enable_step_mode)"/>
+
+    <!-- Network Unity params -->
+    <param name="sim_ip"           value="$(arg sim_ip)"/>
+    <param name="self_ip"          value="$(arg self_ip)"/>
+    <param name="use_broadcast"    value="$(arg use_broadcast)"/>
+    <param name="position_port"    value="9000"/>
+    <param name="metadata_port"    value="9001"/>
+    <param name="image_port"       value="9002"/>
+    <param name="udp_port"         value="9004"/>
+    <param name="step_port"        value="9005"/>
+    <param name="lidar_port"       value="9006"/>
+    <param name="lidar_udp_port"   value="9007"/>
+
+    <!-- Data to publish -->
+    <param name="publish_clock"            value="$(arg publish_clock)"/>
+    <param name="publish_metadata"         value="$(arg publish_metadata)"/>
+    <param name="publish_collisions"       value="$(arg publish_collisions)"/>
+    <param name="publish_imu"              value="$(arg publish_imu)"/>
+    <param name="publish_odom"             value="$(arg publish_odom)"/>
+    <param name="publish_noisy_imu"        value="$(arg publish_noisy_imu)"/>
+    <param name="publish_imu_noise_biases" value="$(arg publish_imu_noise_biases)"/>
+    <param name="publish_noisy_odom"       value="$(arg publish_noisy_odom)"/>
+    <param name="publish_stereo_rgb"       value="$(arg publish_stereo_rgb)"/>
+    <param name="publish_stereo_gry"       value="$(arg publish_stereo_gry)"/>
+    <param name="publish_segmentation"     value="$(arg publish_segmentation)"/>
+    <param name="publish_depth"            value="$(arg publish_depth)"/>
+    <param name="publish_third_pov"        value="$(arg publish_third_pov)"/>
+    <param name="publish_front_lidar"      value="$(arg publish_front_lidar)"/>
+    <param name="publish_rear_lidar"       value="$(arg publish_rear_lidar)"/>
+
+    <!-- Simulator and rate parameters -->
+    <param name="frame_rate"        value="$(arg frame_rate)"/>
+    <param name="imu_rate"          value="$(arg imu_rate)"/>
+    <param name="scan_rate"         value="$(arg scan_rate)"/>
+    <param name="enable_collision"  value="$(arg enable_collision)"/>
+    <param name="initial_scene"     value="$(arg initial_scene)"/>
+
+    <!-- Frame parameters -->
+    <param name="world_frame_id"       value="$(arg world_frame_id)"/>
+    <param name="map_frame_id"         value="$(arg map_frame_id)"/>
+    <param name="body_frame_id"        value="$(arg body_frame_id)"/>
+    <param name="body_frame_id_gt"     value="$(arg body_frame_id_gt)"/>
+
+    <!-- Load all parameter files -->
+    <rosparam command="load" file="$(arg params_dir)/camera_params.yaml"/>
+    <rosparam command="load" file="$(arg params_dir)/lidar_params.yaml"/>
+    <rosparam command="load" file="$(arg params_dir)/noise_model.yaml"/>
+    <rosparam command="load" file="$(arg params_dir)/tesse_agent_params.yaml"/>
+    <rosparam command="load" file="$(arg params_dir)/object_spawn_params.yaml"/>
+    <!-- <rosparam command="load" file="$(arg params_dir)/map_tfs.yaml"/> -->
+  </node>
+
+  <!-- Launch Teleop Node -->
+  <group if="$(arg teleop)">
+    <node ns="$(arg ns)" pkg="tesse_ros_bridge" type="key_teleop.py"
+          name="key_teleop" output="screen" launch-prefix="gnome-terminal --command">
+      <!-- NOTE: `hz` must be fairly slow (slower than clock rate) -->
+      <param name="hz"            value="10"/>
+      <param name="forward_rate"  value="1.0"/>
+      <param name="backward_rate" value="1.0"/>
+      <param name="rotation_rate" value="0.01"/>
+      <param name="strafe_rate"   value="1.0"/>
+      <param name="use_ackermann" value="$(arg drive_with_ackermann)"/>
+
+      <remap from="drive" to="drive"/>
+    </node>
+  </group>
+</launch>

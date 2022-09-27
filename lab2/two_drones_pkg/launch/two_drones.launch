@@ -1,0 +1,18 @@
+
+<launch>
+  <arg name="static" default="false" />
+
+  <!-- Transform publishers !-->
+  <group if="$(arg static)">
+    <node pkg="tf" type="static_transform_publisher" name="av1broadcaster" args="1 0 0 0 0 0 1 world av1 100" />
+    <node pkg="tf" type="static_transform_publisher" name="av2broadcaster" args="0 0 1 0 0 0 1 world av2 100" />
+  </group>
+
+  <node name="frames_publisher_node" pkg="two_drones_pkg" type="frames_publisher_node" unless="$(arg static)"/>
+
+  <!-- Marker publisher -->
+  <node name="plots_publisher_node" pkg="two_drones_pkg" type="plots_publisher_node"/>
+
+  <!-- Visualizer -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find two_drones_pkg)/config/default.rviz"/>
+</launch>

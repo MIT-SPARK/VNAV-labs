@@ -1,0 +1,11 @@
+<objects>
+  <time>423.6156</time>
+  <object>
+    <type>SMPL_Female_Autonomous</type>
+    <id>0</id>
+    <position x='18.71819' y='1.904896' z='25.33417'/>
+    <quaternion x='0' y='0.7372774' z='0' w='0.6755902'/>
+    <parameters>
+    </parameters>
+  </object>
+</objects>
