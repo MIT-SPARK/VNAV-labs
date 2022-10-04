@@ -9,3 +9,6 @@ Please post on the Github issues page if you encounter bugs and/or have question
 
 # Licenses
 For licenses of the external packages, please refer to their specific repos.
+
+# Acknowledgements
+The development of this material was partially funded by the National Science Foundation under NSF CAREER award “Certifiable Perception for Autonomous Cyber-Physical Systems”.
