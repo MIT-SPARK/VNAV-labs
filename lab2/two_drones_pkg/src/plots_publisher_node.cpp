@@ -76,6 +76,11 @@ class PlotsPublisherNode {
           ref_frame(ref_frame_),
           dest_frame(dest_frame_),
           buffer_size(buffer_size_) {
+      if (buffer_size <= 0) {
+        ROS_ERROR_STREAM("invalid buffer size! defaulting to 10");
+        buffer_size = 10;
+      }
+
       marker_out.header.frame_id = ref_frame;
       marker_out.ns = "trails";
       marker_out.id = parent->num_trails++;

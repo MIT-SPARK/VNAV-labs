@@ -40,8 +40,8 @@ class FramesPublisherNode {
     geometry_msgs::TransformStamped AV2World;
     // NOTE: fields in a ros message default to zero, so we set an identity transform by
     //       setting just the w component of the rotation
-    AV1World.tranform.rotation.w = 1.0;
-    AV2World.tranform.rotation.w = 1.0;
+    AV1World.transform.rotation.w = 1.0;
+    AV2World.transform.rotation.w = 1.0;
 
     // 2. Populate the two transforms for the AVs, using the variable "time"
     //    computed above. Specifically:
