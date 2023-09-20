@@ -1,5 +1,7 @@
 #include <ros/ros.h>
-#include <tf/transform_broadcaster.h>
+#include <tf2_ros/transform_broadcaster.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Vector3.h>
 #include <std_msgs/String.h>
 #include <trajectory_msgs/MultiDOFJointTrajectoryPoint.h>
 #include <sstream>
@@ -17,21 +19,24 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "traj_publisher");
     ros::NodeHandle n;
     ros::Publisher desired_state_pub = n.advertise<trajectory_msgs::MultiDOFJointTrajectoryPoint>("desired_state", 1);
-    ros::Rate loop_rate(500);
+    ros::Rate loop_rate(100);
     ros::Time start(ros::Time::now());
 
 #if TFOUTPUT
-    tf::TransformBroadcaster br;
+    tf2_ros::TransformBroadcaster br;
 #endif
 
     int count = 0;
     while (ros::ok()) {
-        tf::Vector3 origin(0,0,0);
+        tf2::Vector3 origin(0,0,0);
 
         double t = (ros::Time::now()-start).toSec();
 
         // Quantities to fill in
-        tf::Transform desired_pose(tf::Transform::getIdentity());
+        geometry_msgs::TransformStamped desired_pose;
+        desired_pose.header.stamp = ros::Time::now();
+        desired_pose.header.frame_id = "world";
+        desired_pose.child_frame_id = "av-desired";
 
         geometry_msgs::Twist velocity;
         velocity.linear.x = velocity.linear.y = velocity.linear.z = 0;
@@ -42,24 +47,37 @@ int main(int argc, char **argv)
 
 #if STATIC_POSE
         // Static Pose
-        tf::Vector3 displacement(0,0,2);
-        desired_pose.setOrigin(origin+displacement);
-        tf::Quaternion q;
+        tf2::Vector3 displacement(0,0,2);
+        tf2::Vector3 trans = origin + displacement;
+
+        desired_pose.transform.translation.x = trans.x();
+        desired_pose.transform.translation.y = trans.y();
+        desired_pose.transform.translation.z = trans.z();
+
+        tf2::Quaternion q;
         q.setRPY(0,0,PI/4);
         count++;
         std::cout<<"Desired Orientation" << count << std::endl;
-        desired_pose.setRotation(q);
 
+        desired_pose.transform.rotation.x = q.x();
+        desired_pose.transform.rotation.y = q.y();
+        desired_pose.transform.rotation.z = q.z();
+        desired_pose.transform.rotation.w = q.w();
 #else
         // Circle
         double R = 5.0;
         double timeScale = 2.0;
-        desired_pose.setOrigin(
-                        origin + tf::Vector3(R*sin(t/timeScale), R*cos(t/timeScale), 2)
-                     );
-        tf::Quaternion q;
+        tf2::Vector3 trans = origin + tf2::Vector3(R*sin(t/timeScale), R*cos(t/timeScale), 2);
+        desired_pose.transform.translation.x = trans.x();
+        desired_pose.transform.translation.y = trans.y();
+        desired_pose.transform.translation.z = trans.z();
+
+        tf2::Quaternion q;
         q.setRPY(0,0,-t/timeScale);
-        desired_pose.setRotation(q);
+        desired_pose.transform.rotation.x = q.x();
+        desired_pose.transform.rotation.y = q.y();
+        desired_pose.transform.rotation.z = q.z();
+        desired_pose.transform.rotation.w = q.w();
         velocity.linear.x = R*cos(t/timeScale)/timeScale;
         velocity.linear.y = -R*sin(t/timeScale)/timeScale;
         velocity.linear.z = 0;
@@ -76,13 +94,7 @@ int main(int argc, char **argv)
         // Publish
         trajectory_msgs::MultiDOFJointTrajectoryPoint msg;
         msg.transforms.resize(1);
-        msg.transforms[0].translation.x = desired_pose.getOrigin().x();
-        msg.transforms[0].translation.y = desired_pose.getOrigin().y();
-        msg.transforms[0].translation.z = desired_pose.getOrigin().z();
-        msg.transforms[0].rotation.x = desired_pose.getRotation().getX();
-        msg.transforms[0].rotation.y = desired_pose.getRotation().getY();
-        msg.transforms[0].rotation.z = desired_pose.getRotation().getZ();
-        msg.transforms[0].rotation.w = desired_pose.getRotation().getW();
+        msg.transforms[0] = desired_pose.transform;
         msg.velocities.resize(1);
         msg.velocities[0] = velocity;
         msg.accelerations.resize(1);
@@ -91,14 +103,13 @@ int main(int argc, char **argv)
 
         std::stringstream ss;
         ss << "Trajectory Position"
-           << " x:" << desired_pose.getOrigin().x()
-           << " y:" << desired_pose.getOrigin().y()
-           << " z:" << desired_pose.getOrigin().z();
+           << " x:" << desired_pose.transform.translation.x
+           << " y:" << desired_pose.transform.translation.y
+           << " z:" << desired_pose.transform.translation.z;
         ROS_INFO("%s", ss.str().c_str());
 
 #if TFOUTPUT
-        br.sendTransform(tf::StampedTransform(desired_pose, ros::Time::now(),
-                                              "world", "av-desired"));
+        br.sendTransform(desired_pose);
 #endif
 
         ros::spinOnce();
