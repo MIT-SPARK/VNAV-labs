@@ -4,14 +4,13 @@
   <arg name="simulator_data_directory"     default="$(env HOME)/vnav-builds/lab4/lab4_Data"/>
 
   <!-- Launch our controller -->
-  <node name="controller_node" pkg="controller_pkg" type="controller_node">
-    <!-- TODO: Copy your controller gains from lab 3 to here! -->
-    <!-- Controller gains -->
-    <param name="kx" type="double" value="1" />
-    <param name="kv" type="double" value="1" />
-    <param name="kr" type="double" value="1" />
-    <param name="komega" type="double" value="1" />
-  </node>
+  <node name="controller_node" pkg="controller_pkg" type="controller_node"/>
+  <!-- TODO: Copy your controller gains from lab 3 to here! -->
+  <!-- Controller gains -->
+  <param name="kx" type="double" value="1" />
+  <param name="kv" type="double" value="1" />
+  <param name="kr" type="double" value="1" />
+  <param name="komega" type="double" value="1" />
 
   <!-- Launch traj vertices publisher -->
   <node name="traj_vertices_publisher" pkg="planner_pkg"
