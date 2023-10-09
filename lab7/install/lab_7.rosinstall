@@ -8,7 +8,7 @@
     version: master
 - git:
     local-name: gtsam_catkin
-    uri: https://github.com/ethz-asl/gtsam_catkin.git
+    uri: https://github.com/yuluntian/gtsam_catkin.git
     version: master
 - git:
     local-name: metis_catkin
