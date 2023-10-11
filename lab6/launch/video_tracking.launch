@@ -15,5 +15,5 @@
   <node name="viz" pkg="rviz" type="rviz" args="-d $(find lab_6)/rviz/office.rviz" />
 
   <!-- Tip: press space on the terminal you ran this roslaunch to pause the rosbag-->
-  <node name="rosbag" pkg="rosbag" type="play" output="screen" launch-prefix="xterm -geometry 100x20 -e " args="--clock $(arg path_to_dataset)"/>
+  <node name="rosbag" pkg="rosbag" type="play" output="screen" args="--clock $(arg path_to_dataset)"/>
 </launch>
