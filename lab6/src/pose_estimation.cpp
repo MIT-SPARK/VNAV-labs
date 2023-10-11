@@ -32,12 +32,6 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "feature_tracker.h"
-#include "sift_feature_tracker.h"
-#include "orb_feature_tracker.h"
-#include "surf_feature_tracker.h"
-#include "fast_feature_tracker.h"
-
 #include <Eigen/Eigen>
 
 #include <opencv2/core.hpp>
@@ -56,6 +50,7 @@
 
 #include "lab6_utils.h"
 #include "pose_estimation.h"
+#include "tracker_shim.h"
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //  16.485 - Fall 2021  - Lab 6 coding assignment
@@ -81,7 +76,6 @@ DEFINE_int32(pose_estimator, 0,
              "3 for Arun's 3-point method.");
 
 using namespace std;
-using namespace cv::xfeatures2d;
 namespace enc = sensor_msgs::image_encodings;
 
 // Global definitions.
@@ -97,7 +91,7 @@ using RansacProblem3D = opengv::sac_problems::point_cloud::PointCloudSacProblem;
 
 // Global variables. As a general coding style, global variables are followed
 // by a trailing underscore (Google coding style).
-std::unique_ptr<FeatureTracker> feature_tracker_;
+std::unique_ptr<TrackerWrapper> feature_tracker_;
 ros::Publisher pub_pose_estimation_, pub_pose_gt_;
 ros::Subscriber sub_cinfo_;
 geometry_msgs::PoseStamped curr_pose_;
@@ -289,7 +283,7 @@ void cameraCallback(const sensor_msgs::ImageConstPtr &rgb_msg, const sensor_msgs
   // Track features returns the 2D-2D matches between images
   // in pixels (pixel coords in image 1 -> pixel coords in image 2).
   std::pair<std::vector<cv::KeyPoint>, std::vector<cv::KeyPoint>> matched_kp_1_kp_2;
-  feature_tracker_->trackFeatures(prev_bgr, bgr, &matched_kp_1_kp_2);
+  feature_tracker_->track(prev_bgr, bgr, &matched_kp_1_kp_2);
 
   int N = matched_kp_1_kp_2.first.size();
   std::cout << "Matched " << N << " keypoints" << std::endl;
@@ -551,7 +545,7 @@ int main(int argc, char** argv) {
   // convert to tf transform
   tf::poseMsgToTF(pose_camera_body, transform_camera_body);
 
-  feature_tracker_.reset(new SiftFeatureTracker());
+  feature_tracker_.reset(new TrackerWrapper());
 
   // Subscribe to drone pose estimation.
   auto pose_sub = local_nh.subscribe("/ground_truth_pose", 10, poseCallbackTesse);
