@@ -142,7 +142,7 @@ void FeatureTracker::trackFeatures(const cv::Mat &img_1,
   //  DELIVERABLE 5 | Keypoint Matching Quality
   // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
   //
-  unsigned int num_inliers; // TODO compute number of inliers
+  unsigned int num_inliers = 0; // TODO compute number of inliers
   // 
   // For this part, you will need to:
   //   1. Draw the inlier (green) and outlier (red) matches in a similar way
