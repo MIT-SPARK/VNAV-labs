@@ -7,9 +7,9 @@
     uri: https://github.com/ethz-asl/glog_catkin.git
     version: master
 - git:
-    local-name: gtsam_catkin
-    uri: https://github.com/yuluntian/gtsam_catkin.git
-    version: master
+    local-name: gtsam
+    uri: git@github.com:borglab/gtsam.git
+    version: 4.2
 - git:
     local-name: metis_catkin
     uri: https://github.com/ethz-asl/metis_catkin.git
