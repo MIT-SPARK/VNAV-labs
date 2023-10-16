@@ -8,7 +8,7 @@
     version: master
 - git:
     local-name: gtsam
-    uri: git@github.com:borglab/gtsam.git
+    uri: https://github.com/borglab/gtsam.git
     version: 4.2
 - git:
     local-name: metis_catkin
