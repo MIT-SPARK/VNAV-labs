@@ -15,7 +15,7 @@ wstool update
 
 2. Build lab_7:
 ```
-catkin build gtsam_catkin
+catkin build gtsam
 catkin build lab_7
 ```
 
