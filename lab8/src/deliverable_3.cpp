@@ -30,14 +30,14 @@ using OrbDatabase = DBoW2::TemplatedDatabase<cv::Mat, DBoW2::FORB>;
 //  16.485 - Fall 2023  - Lab 8 coding assignment
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 //
-//  In this code, we ask you to evaluate place recognition
+//  In this code, we ask you to implement and evaluate place recognition.
 //
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //  DELIVERABLE 3 | Evaluating BoW Place Recognition with RANSAC
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 //
-// Follow along with the code below and handout instructions to evaluate BoW
-// Place Recognition with RANSAC.
+// Follow along with the code below and handout instructions to implement BoW
+// Place Recognition and evaluate it with RANSAC.
 //
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
