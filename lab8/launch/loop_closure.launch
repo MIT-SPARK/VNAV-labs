@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+  <arg name="path_to_euroc" doc="path to euroc mav0 folder"/>
+  <arg name="score_threshold" default="0.00"/>
+  <arg name="inlier_threshold" default="0"/>
+
+  <!-- Start Loop closure node -->
+  <node pkg="lab_8" type="deliverable_3" name="lab8_d3" output="screen" required="true">
+    <param name="dataset_path" value="$(arg path_to_euroc)"/>
+    <param name="vocabulary_path" value="$(find lab_8)/vocabulary/ORBvoc.yml"/>
+    <param name="score_threshold" value="$(arg score_threshold)"/>
+    <param name="inlier_threshold" value="$(arg inlier_threshold)"/>
+  </node>
+
+  <!-- visualization -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find lab_8)/rviz/loop_closure.rviz" />
+
+</launch>
