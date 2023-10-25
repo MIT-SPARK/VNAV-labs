@@ -1,31 +1,26 @@
 <?xml version="1.0"?>
-<package>
+<package format="2">
   <name>lab_8</name>
   <version>0.0.0</version>
   <description>The lab_8 package. Contains software to learn about SLAM.</description>
 
-  <maintainer email="sjamieson@mit.edu">Stewart Jamieson</maintainer>
+  <maintainer email="arosinol@mit.edu">Antoni Rosinol</maintainer>
 
   <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>roscpp</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>opencv3_catkin</build_depend>
-  <build_depend>gflags_catkin</build_depend>
-  <build_depend>glog_catkin</build_depend>
-  <build_depend>gtsam_catkin</build_depend>
-  <build_depend>actionlib</build_depend>
-  <build_depend>image_transport</build_depend>
-
-  <run_depend>roscpp</run_depend>
-  <run_depend>std_msgs</run_depend>
-  <run_depend>opencv3_catkin</run_depend>
-  <run_depend>gflags_catkin</run_depend>
-  <run_depend>glog_catkin</run_depend>
-  <run_depend>gtsam_catkin</run_depend>
-  <run_depend>actionlib</run_depend>
-  <run_depend>image_transport</run_depend>
+  <depend>actionlib</depend>
+  <depend>darknet_ros</depend>
+  <depend>dbow2_catkin</depend>
+  <depend>gflags_catkin</depend>
+  <depend>glog_catkin</depend>
+  <depend>gtsam</depend>
+  <depend>image_transport</depend>
+  <depend>lab_5</depend>
+  <depend>message_filters</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
 
 </package>
