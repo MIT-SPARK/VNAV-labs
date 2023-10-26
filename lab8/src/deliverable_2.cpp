@@ -29,7 +29,7 @@ using namespace gtsam;
 using ProjectionFactor = gtsam::GenericProjectionFactor<gtsam::Pose3, gtsam::Point3, gtsam::Cal3_S2>;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//  16.485 - Fall 2021  - Lab 8 coding assignment
+//  16.485 - Fall 2023  - Lab 8 coding assignment
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 //
 //  In this code, we ask you to implement object localization using GTSAM
@@ -87,6 +87,9 @@ int main(int argc, char** argv) {
 
   // (HINT) Remember that every factor should have a non-zero noise model. When using ground truth positioning, it should be small.
   // (HINT) A good estimate of the camera centroid noise is `gtsam::noiseModel::Isotropic::Sigma(2, 10.0)`
+
+  // (HINT) You can send images for object detection to YOLO (darknet_ros_node) using a ROS Action 
+  // client: 'actionlib::SimpleActionClient<darknet_ros_msgs::CheckForObjectsAction>'.
 
   // ROS spin until killed.
   ros::spin();

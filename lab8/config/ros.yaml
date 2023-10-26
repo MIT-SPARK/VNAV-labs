@@ -1,6 +1,7 @@
 subscribers:
   camera_reading:
-    topic: /camera/rgb/image_raw
+    topic: /camera/rgb/image_color    # This is the input topic of the node. If you want the network to listen to a different topic, change this.
+    # NOTE: For the freiburg dataset, the topic is '/camera/rgb/image_color'
     queue_size: 1
 
 actions:
