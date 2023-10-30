@@ -82,6 +82,8 @@ cv::Point2f findCentroid(darknet_ros_msgs::BoundingBox const &bbox, cv::Mat cons
         cv::rectangle(img, cv::Point(bbox.xmin, bbox.ymin), cv::Point(bbox.xmax, bbox.ymax), cv::Scalar(0, 0, 255), 2, 8, 0);
         cv::circle(img, centroid, 4, cv::Scalar(0, 0, 255), -1);
     }
+
+    return centroid;
 }
 
 /**
