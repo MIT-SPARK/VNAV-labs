@@ -56,4 +56,5 @@ RUN git clone --depth 1 https://github.com/UZ-SLAMLab/ORB_SLAM3.git \
     && git apply ../orb_slam.patch \
     && bash build.sh
 
-CMD ORB_SLAM3/Examples/Stereo-Inertial/stereo_inertial_euroc ORB_SLAM3/Vocabulary/ORBvoc.txt ORB_SLAM3/Examples/Stereo-Inertial/EuRoC.yaml /datasets/MH_01_easy ORB_SLAM3/Examples/Stereo-Inertial/EuRoC_TimeStamps/MH01.txt
+COPY .run_orbslam.sh run_orbslam.sh
+CMD bash /workspace/run_orbslam.sh
