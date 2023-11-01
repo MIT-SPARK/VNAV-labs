@@ -219,7 +219,6 @@ Matches findLoopClosures(const Config& config,
   OrbDatabase database(vocabulary);
 
   ROS_INFO_STREAM("Finding matches for " << data.frames.size() << " frames...");
-  std::vector<DBoW2::BowVector> bow_vecs;
   cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create(500, 1.2f, 1);
 
   for (size_t i = 0; i < data.frames.size(); ++i) {
@@ -249,7 +248,8 @@ Matches findLoopClosures(const Config& config,
     // ~~~~ end solution
   }
 
-  ROS_INFO_STREAM("Finished finding matches (found " << result.size() << " matches).");
+  ROS_INFO_STREAM("Finished finding matches (found " << result.size()
+                                                     << " candidates).");
   return result;
 }
 
@@ -263,12 +263,17 @@ void pruneLoopClosures(Matches& matches, const float min_score) {
 }
 
 void pruneSequentialLoopClosures(Matches& matches) {
+  const size_t num_matches_before = matches.size();
+
   // (TODO) Prune the matches that correspond to sequential frames.
   // ~~~~ begin solution
   //
   //     **** FILL IN HERE ***
   //
   // ~~~~ end solution
+
+  ROS_INFO_STREAM("Pruned " << num_matches_before - matches.size()
+                            << " sequential matches");
 }
 
 void verifyLoopClosuresRansac(const Config& config,
@@ -277,7 +282,6 @@ void verifyLoopClosuresRansac(const Config& config,
   // The wrapper can be used like your tracker from lab 5.
   lab8::TrackerWrapper wrapper;
 
-  std::map<size_t, size_t> new_matches;
   for (Match& match : matches) {
     const auto& frame_from = data.frames.at(match.from);
     const auto& frame_to = data.frames.at(match.to);
@@ -352,7 +356,7 @@ int main(int argc, char** argv) {
 
   // Visualize all detected matches.
   const bool color_by_score =
-      true;  // If true color all matches by their score from red (lowest) to green (highest).
+      true;  // If true color all matches by their score from red (lowest) to green (highest). If false just show them in green.
   Visualizer visualizer(data, matches, color_by_score);
   visualizer.spin();
   return 0;
