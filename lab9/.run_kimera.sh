@@ -13,7 +13,7 @@ DATASET_TYPE=0
 USE_LCD=0
 
 # Specify: 1 to enable logging of output files, 0 to not.
-LOG_OUTPUT=0
+LOG_OUTPUT=1
 ###################################################################
 
 ###################################################################
@@ -31,7 +31,7 @@ VOCABULARY_PATH="vocabulary"
 
 # Output path: specify where the output logs will be written.
 # (only used if LOG_OUTPUT is enabled)
-OUTPUT_PATH="/output/kimera"
+OUTPUT_PATH="/output/kimera/"
 ###################################################################
 
 # Parse Options.
