@@ -18,13 +18,13 @@
   <build_depend>opencv3_catkin</build_depend>
   <build_depend>glog_catkin</build_depend>
   <build_depend>image_transport</build_depend>
-  <build_depend>cv_bridge</build_depend>
+  <build_depend>cv_bridge_catkin</build_depend>
 
   <run_depend>roscpp</run_depend>
   <run_depend>rospy</run_depend>
   <run_depend>opencv3_catkin</run_depend>
   <run_depend>glog_catkin</run_depend>
   <run_depend>image_transport</run_depend>
-  <run_depend>cv_bridge</run_depend>
+  <run_depend>cv_bridge_catkin</run_depend>
 
 </package>
