@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   opencv3_catkin
   glog_catkin
   image_transport
-  cv_bridge
+  cv_bridge_catkin
   opengv
   eigen_catkin
   tf_conversions
@@ -19,7 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES
- CATKIN_DEPENDS roscpp rospy glog_catkin image_transport cv_bridge lab_5 opengv eigen_catkin opencv3_catkin
+ CATKIN_DEPENDS roscpp rospy glog_catkin image_transport cv_bridge_catkin lab_5 opengv eigen_catkin opencv3_catkin
 )
 
 include_directories(

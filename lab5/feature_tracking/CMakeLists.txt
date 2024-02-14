@@ -9,13 +9,13 @@ find_package(catkin REQUIRED COMPONENTS
   opencv3_catkin
   glog_catkin
   image_transport
-  cv_bridge
+  cv_bridge_catkin
 )
 
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES feature_trackers
- CATKIN_DEPENDS roscpp rospy opencv3_catkin glog_catkin image_transport cv_bridge
+ CATKIN_DEPENDS roscpp rospy opencv3_catkin glog_catkin image_transport cv_bridge_catkin
 )
 
 include_directories(
