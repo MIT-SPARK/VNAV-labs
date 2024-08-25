@@ -18,6 +18,7 @@ launch:
         args: "0 0 1 0 0 0 world av2"
 
     - node:
+        unless: "$(var static)"
         pkg: two_drones_pkg
         exec: "frames_publisher_node"
         name: "frames_publisher_node"
