@@ -7,7 +7,7 @@ The necessary simulator builds can be found on [this page](https://drive.google.
 
 ROS bags necessary for labs can be found [here](https://github.com/MIT-SPARK/VNAV-lab-data).
 
-Please post on the Github issues page if you encounter bugs and/or have questions. 
+Please post on the Github issues page if you encounter bugs and/or have questions.
 
 # Licenses
 For licenses of the external packages, please refer to their specific repos.
