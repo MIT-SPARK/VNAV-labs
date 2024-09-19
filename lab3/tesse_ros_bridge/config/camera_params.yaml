@@ -1,0 +1,121 @@
+tesse_ros_bridge:
+  ros__parameters:
+    # Parameters for all cameras
+    # These are NOT physical unity cameras; they are image streams that are requested from the simulator.
+    # Multiple cameras can have the same frame_id, and/or the same camera_id.
+    #
+    # camera_id can be any of the following:
+    #   left_cam
+    #   right_cam
+    #   seg_cam
+    #   depth_cam
+    #   third_person
+    #
+    # NOTE: setting compression to True slows down the simulator.
+
+    camera_params:
+      RGB_LEFT:
+        camera_id: "left_cam"
+        frame_id: "left_cam"
+        compression: False
+        num_channels: 3
+        vertical_fov: 60
+        width: 720
+        height: 480
+        near_draw_dist: -0.05
+        far_draw_dist: 50
+        pos_x: -0.05
+        pos_y: 0.0
+        pos_z: 0.0
+        quat_x: 0.0
+        quat_y: 0.0
+        quat_z: 0.0
+        quat_w: 1.0
+
+      RGB_RIGHT:
+        camera_id: "right_cam"
+        frame_id: "right_cam"
+        compression: False
+        num_channels: 3
+        vertical_fov: 60
+        width: 720
+        height: 480
+        near_draw_dist: -0.05
+        far_draw_dist: 50
+        pos_x: 0.05
+        pos_y: 0.0
+        pos_z: 0.0
+        quat_x: 0.0
+        quat_y: 0.0
+        quat_z: 0.0
+        quat_w: 1.0
+
+      # Intrinsics/Extrinsics are explicitly not provided for these cameras:
+      #   These are additional data calls to the same camera object in the simulator.
+      #   `num_channels` is set to 1 because these are monochrome cameras.
+      GRY_LEFT:
+        camera_id: "left_cam"
+        frame_id: "left_cam"
+        compression: False
+        num_channels: 1
+
+      GRY_RIGHT:
+        camera_id: "right_cam"
+        frame_id: "right_cam"
+        compression: False
+        num_channels: 1
+
+      SEGMENTATION:
+        camera_id: "seg_cam"
+        frame_id: "left_cam"
+        compression: False
+        num_channels: 3
+        vertical_fov: 60
+        width: 720
+        height: 480
+        near_draw_dist: -0.05
+        far_draw_dist: 50
+        pos_x: -0.05
+        pos_y: 0.0
+        pos_z: 0.0
+        quat_x: 0.0
+        quat_y: 0.0
+        quat_z: 0.0
+        quat_w: 1.0
+
+      DEPTH:
+        camera_id: "depth_cam"
+        frame_id: "left_cam"
+        compression: False
+        num_channels: 1
+        vertical_fov: 60
+        width: 720
+        height: 480
+        near_draw_dist: -0.05
+        far_draw_dist: 200
+        pos_x: -0.05
+        pos_y: 0.0
+        pos_z: 0.0
+        quat_x: 0.0
+        quat_y: 0.0
+        quat_z: 0.0
+        quat_w: 1.0
+
+      THIRD_PERSON:
+        camera_id: "third_person"
+        frame_id: "third_person"
+        compression: False
+        num_channels: 3
+        vertical_fov: 90
+        width: 1024
+        height: 768
+        near_draw_dist: 0.3
+        far_draw_dist: 159
+        pos_x: 0.0
+        pos_y: 0.7
+        pos_z: -1.2
+        quat_x: 0.1074007
+        quat_y: 0.0
+        quat_z: 0.0
+        quat_w: 0.9942158
+  # Compare this snippet from tesse_ros_bridge/config/lidar_params.yaml:

@@ -1,0 +1,31 @@
+#param: $(find tesse_ros_bridge)/config/params.yaml
+launch:
+  - node:
+      pkg: tesse_ros_bridge
+      exec: tesse_ros_node
+      name: tesse_ros_bridge
+      output: screen
+      remap: 
+        - from: odom
+          to: /current_state
+      param:
+      - from: $(find-pkg-share tesse_ros_bridge)/config/params.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/camera_params.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/lidar_params.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/map_tfs.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/noise_model.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/object_spawn_params.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/tesse_agent_params.yaml
+  - node:
+      pkg: tesse_ros_bridge
+      exec: quadrotor_control_interface
+      name: quadrotor_control_interface
+      output: screen
+      param:
+      - from: $(find-pkg-share tesse_ros_bridge)/config/params.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/camera_params.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/lidar_params.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/map_tfs.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/noise_model.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/object_spawn_params.yaml
+      - from: $(find-pkg-share tesse_ros_bridge)/config/tesse_agent_params.yaml

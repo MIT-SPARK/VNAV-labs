@@ -1,0 +1,37 @@
+tesse_ros_bridge:
+  ros__parameters:
+    # Parameters for all lidar sensors
+    #
+    # Set pos and quat to "default" to keep the simulator pose for the sensors.
+    # All lidars face front, so modify scan angles to limit FOV. 
+
+    lidar_params:
+      FRONT:
+        lidar_id: "front_lidar"
+        frame_id: "front_lidar"
+        scan_min_angle: -0.785398
+        scan_max_angle: 3.92699
+        scan_max_range: 200
+        scan_beams: 1080
+        pos_x: "default"
+        pos_y: "default"
+        pos_z: "default"
+        quat_x: "default"
+        quat_y: "default"
+        quat_z: "default"
+        quat_w: "default"
+
+      REAR:
+        lidar_id: "rear_lidar"
+        frame_id: "rear_lidar"
+        scan_min_angle: -3.92699
+        scan_max_angle: 0.785398
+        scan_max_range: 200
+        scan_beams: 1080
+        pos_x: "default"
+        pos_y: "default"
+        pos_z: "default"
+        quat_x: "default"
+        quat_y: "default"
+        quat_z: "default"
+        quat_w: "default"

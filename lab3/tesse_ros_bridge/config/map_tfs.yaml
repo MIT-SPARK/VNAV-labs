@@ -1,0 +1,22 @@
+tesse_ros_bridge:
+  ros__parameters:
+    # Transforms between /map and /world for scenes
+    # Students: don't change this!
+
+    windridge_city_tf:
+      px: 191.8859118
+      py: -238.6368824
+      pz: -342.6979118
+      qx: 0.0
+      qy: 0.0
+      qz: 1.0
+      qw: 0.0
+
+    test_scene_tf:
+      px: 0.0
+      py: 0.0
+      pz: 0.0
+      qx: 0.0
+      qy: 0.0
+      qz: 0.0
+      qw: 1.0

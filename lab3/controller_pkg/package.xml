@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>controller_pkg</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="fishberg.dev@gmail.com">Andrew Fishberg</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  
+  
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_eigen</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>eigen</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>trajectory_msgs</depend>
+  <depend>rosidl_default_runtime</depend>
+  <depend>mav_msgs</depend>
+
+  <!--
+  #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+  #include <tf2/LinearMath/Quaternion.h>
+  #include <tf2/utils.h>
+  #include <mav_msgs/msg/actuators.hpp>
+  #include <nav_msgs/msg/odometry.hpp>
+  #include <trajectory_msgs/msg/multi_dof_joint_trajectory_point.hpp>
+  #include <cmath>
+  -->
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

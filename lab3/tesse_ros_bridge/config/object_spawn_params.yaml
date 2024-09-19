@@ -1,0 +1,359 @@
+tesse_ros_bridge:
+  ros__parameters:
+    # Parameters for Obstacle Spawns
+
+    num_objects: 0
+
+    # If you set `use_custom_pose` to true, you must define px-qw (pos and quat)
+    #   for the obstacle. Postpend the index of the obstacle to the name.
+    #   Note that you must do this for as many obstacles as `num_obstacles`
+    #   declares. All obstacles must have at minimum an `id` even if you're not
+    #   using an initial pose.
+    #   Setting `use_custom_pose` to false will result in the use of random poses.
+    #   Leave `id` as 0 or 1 for humans.
+    #
+    # If you set `send_params` to true, you can define the `params` list. This 
+    #   is the list of SMPL body parameters in the case of human objects.
+    #   If you do not specify the `params` list then the bridge will choose
+    #   reasonable random parameters. If you set `sesend_params` to false, then no
+    #   parameters will be sent and the simulator will spawn objects with defaults.
+
+    object_0:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    #   px: 208.42
+    #   py: 341.7
+    #   pz: -230.61
+    #   qx: 0.0
+    #   qy: 0.0
+    #   qz: 0.0
+    #   qw: 1.0
+    #   params:
+    #   - 0.0
+    #   - 0.0
+    #   - 0.2
+    #   - -0.1
+    #   - 0.5
+    #   - -0.8
+    #   - 0.2
+    #   - 0.3
+    #   - -0.7
+    #   - 0.0
+
+    object_1:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_2:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_3:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_4:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_5:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_6:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_7:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_8:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_9:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_10:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_11:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_12:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_13:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_14:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_15:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_16:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_17:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_18:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_19:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_20:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_21:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_22:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_23:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_24:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_25:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_26:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_27:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_28:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_29:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_30:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_31:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_32:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_33:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_34:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_35:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_36:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_37:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_38:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_39:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_40:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_41:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_42:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_43:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_44:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_45:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_46:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_47:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_48:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_49:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_50:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_51:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_52:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_53:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_54:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_55:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_56:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_57:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_58:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_59:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_60:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_61:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_62:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_63:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_64:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_65:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_66:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_67:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_68:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_69:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_70:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_71:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_72:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_73:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_74:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_75:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_76:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_77:
+      id: 1
+      use_custom_pose: false
+      send_params: true
+    object_78:
+      id: 0
+      use_custom_pose: false
+      send_params: true
+    object_79:
+      id: 1
+      use_custom_pose: false
+      send_params: true

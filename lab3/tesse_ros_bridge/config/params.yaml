@@ -1,0 +1,74 @@
+tesse_ros_bridge:
+  ros__parameters:
+    teleop: false
+    drive_with_ackermann: false
+    use_gt_frames: true
+    enable_step_mode: false
+
+    # Network arguments -->
+    sim_ip: 127.0.0.1
+    self_ip: 127.0.0.1
+    use_broadcast: true
+
+    # Specify data to publish -->
+    # `publish_stereo_gry` toggles between publishing as mono8 (true) or rgb8 (false) \
+    # for both left/right stereo cameras -->
+    publish_clock: true
+    publish_metadata: false
+    publish_collisions: false
+
+    publish_imu: true
+    publish_odom: true
+    publish_noisy_imu: false
+    publish_imu_noise_biases: false
+    publish_noisy_odom: false
+
+    publish_stereo_rgb: false
+    publish_stereo_gry: false
+    publish_segmentation: false
+    publish_depth: false
+    publish_third_pov: false
+
+    publish_front_lidar: false
+    publish_rear_lidar: false
+
+    # <!-- Sanity check argument -->
+    stereo_baseline: 0.10
+
+    # <!-- Sim arguments -->
+    # <!-- NOTE: `use_sim_time` should always be true for tesse! -->
+    use_sim_time: true
+    frame_rate: 20.0
+    imu_rate: 200
+    scan_rate: 40.0
+    enable_collision: true
+    initial_scene: 1
+
+    # <!-- Reference frame arguments -->
+    world_frame_id: world
+    map_frame_id: map
+    body_frame_id: base_link
+    body_frame_id_gt: base_link_gt
+
+    # <!-- If use_sim, simulator will publish -->
+
+    position_port: 9000
+    metadata_port: 9001
+    image_port: 9002
+    udp_port: 9004
+    step_port: 9005
+    lidar_port: 9006
+    lidar_udp_port: 9007
+
+    #  <!-- Load all parameter files -->
+    # <rosparam command="load" file="$(arg params_dir)/camera_params.yaml"/>
+    # <rosparam command="load" file="$(arg params_dir)/lidar_params.yaml"/>
+    # <rosparam command="load" file="$(arg params_dir)/noise_model.yaml"/>
+    # <rosparam command="load" file="$(arg params_dir)/tesse_agent_params.yaml"/>
+    # <rosparam command="load" file="$(arg params_dir)/object_spawn_params.yaml"/>
+
+    ### quadrotor_control_interface
+    #<remap from="quadrotor_control/rotor_speed_cmds"  to="/rotor_speed_cmds"/>
+
+    ## TESSE_ROS_BRIDGE\
+    #<remap from="odom"                   to="/current_state"/>

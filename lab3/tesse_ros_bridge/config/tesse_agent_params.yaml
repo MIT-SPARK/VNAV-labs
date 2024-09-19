@@ -1,0 +1,50 @@
+tesse_ros_bridge:
+  ros__parameters:
+    # Extra parameters for agent
+
+    initial_pose:
+      enabled: false
+
+    #  Office:
+    # initial_pose:
+    #   enabled: true
+    #   px: -19.84885
+    #   py: 2.491999
+    #   pz: 24.12659
+    #   qx: 0.007452539
+    #   qy: 0.699654
+    #   qz: -0.007609652
+    #   qw: 0.7144025
+
+    # # Subway
+    # initial_pose:
+    #   enabled: true
+    #   px: -38.27889
+    #   py: -4.500005
+    #   pz: -2.843023
+    #   qx: 0.0
+    #   qy: 0.0
+    #   qz: 0.0
+    #   qw: 1.0
+
+    # # Apartment
+    # initial_pose:
+    #   enabled: true
+    #   px: -16.04391
+    #   py: 2.461393
+    #   pz: -2.61944
+    #   qx: 0.0
+    #   qy: 0.7391682
+    #   qz: 0.0
+    #   qw: 0.673521
+
+    # Neighborhood
+    # initial_pose:
+    #   enabled: true
+    #   px: 15.84936
+    #   py: 1.500025
+    #   pz: 11.9686
+    #   qx: 0.0
+    #   qy: 0.67734
+    #   qz: 0.0
+    #   qw: -0.7204024

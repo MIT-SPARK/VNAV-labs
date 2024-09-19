@@ -1,0 +1,29 @@
+tesse_ros_bridge:
+  ros__parameters:
+    # Parameters for Obstacle Spawns
+
+    # Odometry noise modeL
+    position_noise_mu: 0.0
+    #position_noise_sigma: 0.5
+    position_noise_sigma: 0.0005
+    rotation_noise_mu: 0.0
+    #rotation_noise_sigma: 0.05
+    rotation_noise_sigma: 0.0005
+    linear_velocity_noise_mu: 0.0
+    #linear_velocity_noise_sigma: 0.1
+    linear_velocity_noise_sigma: 0.0001
+
+    # IMU bias model
+    ## The more correlation time, the closer to a Wiener process (instead of Gauss-Markov)
+    gyroscope_bias_correlation_time: 500 # [ s ]
+    gyroscope_bias_random_walk_mu: 0.0 # [ rad / s ]
+    gyroscope_bias_random_walk: 0.000019393 # [ rad / s * Hz ]
+    accelerometer_bias_correlation_time: 500 # [ s ]
+    accelerometer_bias_random_walk_mu: 0.0 # [ m / s^2 ]
+    accelerometer_bias_random_walk: 0.003 # [ m / s^2 * Hz]
+
+    # IMU white noise model
+    gyroscope_noise_density_mu: 0.0 # [ rad / s ]
+    gyroscope_noise_density: 0.00016968 # [ rad / s / sqrt(Hz) ]
+    accelerometer_noise_density_mu: 0.0 # [ m / s^2 ]
+    accelerometer_noise_density: 0.002 # [ m / s^2 / sqrt(Hz) ]
