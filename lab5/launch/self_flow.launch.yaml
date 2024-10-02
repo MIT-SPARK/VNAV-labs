@@ -1,0 +1,12 @@
+launch:
+    - node:
+        pkg: usb_cam
+        exec: usb_cam_node
+        name: webcam
+    - node:
+        pkg: lab_5
+        exec: self_flow
+        name: self_flow
+        remap:
+            from: "/images_topic"
+            to: "/webcam/image_raw"
