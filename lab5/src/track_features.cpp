@@ -30,11 +30,8 @@ class TrackerNode : public rclcpp::Node {
 public:
   int mode_;
   std::string descriptor_;
-  bool extended_plots_;
   bool save_images_;
   bool show_images_;
-  bool compute_inliers_;
-  bool debug_tracker_;
 
   image_transport::Subscriber sub_;
 
@@ -45,11 +42,8 @@ public:
     declare_parameter<std::string>("img1_path");
     declare_parameter<std::string>("img2_path");
 
-    declare_parameter<bool>("extended_plots");
     declare_parameter<bool>("save_images");
     declare_parameter<bool>("show_images");
-    declare_parameter<bool>("compute_inliers");
-    declare_parameter<bool>("debug_tracker");
 
     if (!(get_parameter("mode", mode_) &&
           get_parameter("descriptor", descriptor_))) {
@@ -59,11 +53,8 @@ public:
     LOG(INFO) << "Descriptor: " << descriptor_;
     LOG(INFO) << "Mode: " << mode_;
 
-    get_parameter("extended_plots", extended_plots_);
     get_parameter("save_images", save_images_);
     get_parameter("show_images", show_images_);
-    get_parameter("compute_inliers", compute_inliers_);
-    get_parameter("debug_tracker", debug_tracker_);
   }
 
   void run() {
@@ -102,7 +93,9 @@ public:
         return;
       }
       RCLCPP_WARN(get_logger(), "Retrieved Images!");
-      feature_tracker->trackFeatures(img_1, img_2);
+      feature_tracker->trackFeatures(img_1, img_2, nullptr, save_images_,
+                                     show_images_);
+      cv::waitKey(0);
     } else if (mode_ == 1) {
       // VIDEO
       cv::namedWindow("view", cv::WINDOW_NORMAL);
@@ -138,11 +131,11 @@ public:
       // Visualize the image.
       cv::imshow("view", image);
       static cv::Mat prev_image = image;
-      feature_tracker->trackFeatures(
-          image, prev_image, nullptr, extended_plots_, save_images_,
-          show_images_, compute_inliers_, debug_tracker_);
+      feature_tracker->trackFeatures(image, prev_image, nullptr, save_images_,
+                                     show_images_);
 
       prev_image = image;
+      cv::waitKey(10);
     } catch (cv_bridge::Exception &e) {
       RCLCPP_ERROR_STREAM(get_logger(), "Could not convert from"
                                             << msg->encoding.c_str()
@@ -156,7 +149,6 @@ public:
    */
   void lkImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr &msg,
                        std::shared_ptr<LKFeatureTracker> lk_tracker) {
-    RCLCPP_INFO(get_logger(), "LK Callback");
     try {
       // Convert ROS msg type to OpenCV image type.
       cv::Mat image = cv_bridge::toCvShare(msg, "bgr8")->image;

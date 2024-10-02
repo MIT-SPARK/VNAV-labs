@@ -22,10 +22,7 @@ public:
   trackFeatures(const cv::Mat &img_1, const cv::Mat &img_2,
                 std::pair<std::vector<cv::KeyPoint>, std::vector<cv::KeyPoint>>
                     *matched_kp_1_kp_2 = nullptr,
-                const bool extended_plots = false,
-                const bool save_images = false, const bool show_images = false,
-                const bool compute_inliers = true,
-                const bool debug_tracker = true);
+                const bool save_images = false, const bool show_images = false);
 
   void printStats() const;
 

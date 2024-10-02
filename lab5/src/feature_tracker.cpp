@@ -36,11 +36,8 @@ void FeatureTracker::trackFeatures(
     const cv::Mat& img_1,
     const cv::Mat& img_2,
     std::pair<std::vector<cv::KeyPoint>, std::vector<cv::KeyPoint>>* matched_kp_1_kp_2,
-    const bool extended_plots,
     const bool save_images,
-    const bool show_images,
-    const bool compute_inliers,
-    const bool debug_tracker) {
+    const bool show_images) {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //  DELIVERABLE 3 | Feature Descriptors (SIFT)
   // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -145,8 +142,7 @@ void FeatureTracker::trackFeatures(
   // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
   // ~
   //
-  unsigned int num_inliers = 0;  // TODO: FILL IN HERE -- compute number of
-  // inliers
+  unsigned int num_inliers = 0;  // TODO: FILL IN HERE -- compute number of inliers
   //
   // For this part, you will need to:
   //   1. Draw the inlier (green) and outlier (red) matches in a similar way
@@ -272,6 +268,5 @@ void FeatureTracker::drawMatches(const cv::Mat& img_1,
   // Show detected matches
   if (show_images) {
     imshow("tracked_features", img_matches);
-    cv::waitKey(0);
   }
 }
