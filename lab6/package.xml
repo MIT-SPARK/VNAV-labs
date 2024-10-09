@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package>
+  <name>lab_6</name>
+  <version>0.0.0</version>
+  <description>The lab_6 package. Contains software to learn about robust pose estimation.</description>
+
+  <maintainer email="aaronray@mit.edu">Aaron Ray</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rclcpp</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>lab_5</build_depend>
+  <build_depend>opengv</build_depend>
+
+  <run_depend>rclcpp</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>lab_5</run_depend>
+  <run_depend>opengv</run_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>

@@ -1,0 +1,56 @@
+launch:
+
+    - arg:
+        name: "pose_estimator"
+        default: "0"
+    - arg:
+        name: "dataset"
+        default: "vnav-lab6-office"
+
+    - arg:
+        name: "path_to_dataset"
+        default: "$(find-pkg-share lab_6)/bags/$(var dataset)"
+
+    - arg:
+        name: "use_ransac"
+        default: "true"
+    - arg:
+        name: "scale_translation"
+        default: "true"
+    - arg:
+        name: "show_images"
+        default: "false"
+
+    - node:
+        pkg: lab_6
+        exec: pose_estimation
+        name: lab_6
+        param:
+            - name: use_ransac
+              value: $(var use_ransac)
+            - name: scale_translation
+              value: $(var scale_translation)
+            - name: pose_estimator
+              value: $(var pose_estimator)
+            - name: show_images
+              value: $(var show_images)
+        remap:
+            - from: "/ground_truth_pose"
+              to: "/tesse/odom"
+
+            - from: "/rgb_images_topic"
+              to: "/tesse/left_cam/rgb/image_raw"
+
+            - from: "/depth_images_topic"
+              to: "/tesse/depth_cam/mono/image_raw"
+
+
+    - node:
+        pkg: rviz2
+        exec: rviz2
+        name: rviz2
+        args: "-d $(find-pkg-share lab_6)/config/default.rviz"
+
+
+    - executable:
+        cmd: 'ros2 bag play $(var path_to_dataset) --clock'
