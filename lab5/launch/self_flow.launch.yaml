@@ -8,5 +8,5 @@ launch:
         exec: self_flow
         name: self_flow
         remap:
-            from: "/images_topic"
-            to: "/webcam/image_raw"
+            - from: "/images_topic"
+              to: "/webcam/image_raw"
