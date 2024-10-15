@@ -1,0 +1,25 @@
+launch:
+
+    - arg:
+        name: max_solver_iterations
+        default: "1"
+    - arg:
+        name: use_mocap
+        default: "false"
+
+    - node:
+        pkg: lab_7
+        exec: deliverable_2_3
+        name: deliverable_2_3
+        output: screen
+        param:
+            - name: "max_solver_iterations"
+              value: "$(var max_solver_iterations)"
+            - name: "use_mocap"
+              value: "$(var use_mocap)"
+
+    - node:
+        pkg: rviz2
+        exec: rviz2
+        name: rviz2
+        args: "-d $(find-pkg-share lab_7)/rviz/lab7.rviz"

@@ -1,0 +1,13 @@
+launch:
+
+    - node:
+        pkg: lab_7
+        exec: deliverable_4
+        name: deliverable_4
+        output: screen
+
+    - node:
+        pkg: rviz2
+        exec: rviz2
+        name: rviz2
+        args: "-d $(find-pkg-share lab_7)/rviz/deliverable_4.rviz"
