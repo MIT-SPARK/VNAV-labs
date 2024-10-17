@@ -81,12 +81,14 @@ class UnaryFactor : public NoiseModelFactor1<Pose2> {
     // The measurement function for a GPS-like measurement is simple:
     // error_x = pose.x - measurement.x
     // error_y = pose.y - measurement.y
-    // Consequently, the Jacobians are:
-    // [ derror_x/dx  derror_x/dy  derror_x/dtheta ] = [1 0 0]
-    // [ derror_y/dx  derror_y/dy  derror_y/dtheta ] = [0 1 0]
+    // The Jacobian arises from a first-order approximation of the error vector
+    // See Sec 3.2 in https://gtsam.org/tutorials/intro.html
+    // [ derror_x/dx  derror_x/dy  derror_x/dtheta ] = [cos(th) -sin(th) 0]
+    // [ derror_y/dx  derror_y/dy  derror_y/dtheta ] = [sin(th) cos(th) 0]
     if (H) {
       // Calculate the jacobian (*H)
-      *H = (Matrix(2, 3) << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0).finished();
+      const auto& R = q.rotation();
+      *H = (Matrix(2, 3) << R.c(), -R.s(), 0.0, R.s(), R.c(), 0.0).finished();
     }
     // Fill here the actual error function.
     return (Vector(2) << q.x() - mx_, q.y() - my_).finished();
