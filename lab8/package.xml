@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lab_8</name>
+  <version>0.0.0</version>
+  <description>The lab_8 package. Contains software to learn about SLAM.</description>
+
+  <maintainer email="fishberg@mit.edu">Andrew Fishberg</maintainer>
+
+  <license>MIT</license>
+
+  <!--
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>actionlib</depend>
+  <depend>darknet_ros</depend>
+  <depend>dbow2_catkin</depend>
+  <depend>gflags_catkin</depend>
+  <depend>glog_catkin</depend>
+  <depend>gtsam</depend>
+  <depend>image_transport</depend>
+  <depend>lab_8</depend>
+  <depend>message_filters</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  -->
+
+  <build_depend>rclcpp</build_depend>
+  <build_depend>gtsam</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>visualization_msgs</build_depend>
+
+  <exec_depend>rclcpp</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>
