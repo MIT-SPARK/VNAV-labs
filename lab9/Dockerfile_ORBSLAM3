@@ -1,0 +1,60 @@
+FROM ubuntu:20.04
+WORKDIR /workspace
+
+# To avoid tzdata asking for geographic location...
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
+RUN apt-get update \
+    && apt-get install -y \
+        build-essential \
+        ca-certificates \
+        cmake \
+        git \
+        libavcodec-dev \
+        libavformat-dev \
+        libboost-all-dev \
+        libdc1394-22-dev \
+        libeigen3-dev \
+        libglw1-mesa-dev \
+        libglew-dev \
+        libgtk2.0-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libpython3-dev \
+        libssl-dev \
+        libswscale-dev \
+        libtbb-dev \
+        libtiff-dev \
+        pkg-config \
+        unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git clone --depth 1 --branch 4.4.0 https://github.com/opencv/opencv.git \
+    && cd opencv \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+             -DCMAKE_BUILD_TYPE=Release \
+             -DBUILD_EXAMPLES=OFF \
+             -DBUILD_DOCS=OFF \
+             -DBUILD_PERF_TESTS=OFF \
+             -DBUILD_TESTS=OFF \
+             -DCMAKE_INSTALL_PREFIX=/usr/local \
+    && make -j$(nproc) install
+
+RUN git clone --depth 1 --branch v0.6 https://github.com/stevenlovegrove/Pangolin.git \
+    && cd Pangolin \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make -j$(nproc) install
+
+COPY orb_slam.patch orb_slam.patch
+RUN git clone --depth 1 https://github.com/UZ-SLAMLab/ORB_SLAM3.git \
+    && cd ORB_SLAM3 \
+    && git apply ../orb_slam.patch \
+    && bash build.sh
+
+COPY .run_orbslam.sh run_orbslam.sh
+CMD bash /workspace/run_orbslam.sh
