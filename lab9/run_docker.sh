@@ -6,7 +6,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 xhost +si:localuser:root
 sudo docker run \
     -v /tmp/.X11-unix/X$DISPLAY_NUM:/tmp/.X11-unix/X$DISPLAY_NUM \
-    -v $HOME/datasets/vnav:/datasets:ro \
+    -v $HOME/vnav/data:/datasets:ro \
     -v $SCRIPT_DIR/output:/output:rw \
     -v $SCRIPT_DIR/params:/kimera_params:ro \
     -e DISPLAY \
