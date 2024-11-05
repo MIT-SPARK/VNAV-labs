@@ -56,5 +56,5 @@ RUN git clone --depth 1 https://github.com/UZ-SLAMLab/ORB_SLAM3.git \
     && git apply ../orb_slam.patch \
     && bash build.sh
 
-COPY .run_orbslam.sh run_orbslam.sh
+COPY run_orbslam.sh run_orbslam.sh
 CMD bash /workspace/run_orbslam.sh

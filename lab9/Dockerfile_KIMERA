@@ -84,5 +84,5 @@ RUN git clone --depth 1 --branch feature/prerelease https://github.com/MIT-SPARK
                 -DKIMERA_BUILD_TESTS=OFF \
     && make -j$(nproc) install
 
-COPY .run_kimera.sh run_kimera.sh
+COPY run_kimera.sh run_kimera.sh
 CMD bash run_kimera.sh
